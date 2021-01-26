@@ -6,6 +6,7 @@
 [node name="Level" type="Node2D"]
 
 [node name="BattleGrid" parent="." instance=ExtResource( 2 )]
+PlayerPath = NodePath("../Player")
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 BattleGridPath = NodePath("../BattleGrid")

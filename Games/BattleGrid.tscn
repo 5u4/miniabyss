@@ -1,7 +1,10 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Games/BattleGrid.cs" type="Script" id=1]
+[ext_resource path="res://Games/BattleGridTileSet.tres" type="TileSet" id=2]
 
 [node name="BattleGrid" type="TileMap"]
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 8, 8 )
 format = 1
 script = ExtResource( 1 )
