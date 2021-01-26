@@ -19,6 +19,17 @@ config/name="Mini Abyss"
 run/main_scene="res://Scenes/Level.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/size/width=256
+window/size/height=144
+window/size/resizable=false
+window/size/test_width=1280
+window/size/test_height=720
+window/stretch/mode="2d"
+window/stretch/aspect="keep"
+
 [rendering]
 
+environment/default_clear_color=Color( 0.156863, 0.172549, 0.203922, 1 )
 environment/default_environment="res://default_env.tres"
