@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Games/BattleGrid.cs" type="Script" id=1]
+
+[node name="BattleGrid" type="TileMap"]
+format = 1
+script = ExtResource( 1 )
