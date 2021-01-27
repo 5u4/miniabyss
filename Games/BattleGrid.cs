@@ -10,24 +10,36 @@ namespace MiniAbyss.Games
         public delegate void OnGenerateMap();
 
         [Export] public NodePath PlayerPath;
+        [Export] public NodePath ExitPath;
         public Player Player;
+        public Exit Exit;
         public const int MapEnlargeSize = 3;
-        public const int Wall = -1;
-        public const int Empty = 0;
+        public const int WallTile = -1;
+        public const int EmptyTile = 0;
+        public const int ExitTile = 1;
         public Dictionary<int, Entity> EntityMap;
 
         public override void _Ready()
         {
             Player = GetNode<Player>(PlayerPath);
-            EntityMap = new Dictionary<int, Entity>();
+            Exit = GetNode<Exit>(ExitPath);
+        }
+
+        public override void _Process(float delta)
+        {
+            base._Process(delta);
+            // TODO: Remove debug
+            if (Input.IsActionJustPressed("ui_accept")) Generate(5, 1, 0.5f);
         }
 
         public void Generate(int dim, int offset, float coverage)
         {
+            EntityMap = new Dictionary<int, Entity>();
             GD.Randomize();
             var m = CrawlEmptySpaces(dim, coverage);
             SetTilesWithMap(m, dim, offset);
             PlacePlayer();
+            PlaceExitAwayFrom(WorldToMap(Player.Position));
             CenterGridInViewport();
             EmitSignal(nameof(OnGenerateMap));
         }
@@ -44,11 +56,11 @@ namespace MiniAbyss.Games
 
         private bool IsWall(Vector2 v)
         {
-            return GetCellv(v) == Wall
-                   || GetCellv(v + new Vector2(1, 1)) == Wall
-                   || GetCellv(v + new Vector2(1, -1)) == Wall
-                   || GetCellv(v + new Vector2(-1, 1)) == Wall
-                   || GetCellv(v + new Vector2(-1, -1)) == Wall;
+            return GetCellv(v) == WallTile
+                   || GetCellv(v + new Vector2(1, 1)) == WallTile
+                   || GetCellv(v + new Vector2(1, -1)) == WallTile
+                   || GetCellv(v + new Vector2(-1, 1)) == WallTile
+                   || GetCellv(v + new Vector2(-1, -1)) == WallTile;
         }
 
         private void PlacePlayer()
@@ -58,6 +70,34 @@ namespace MiniAbyss.Games
             while (IsWall(cell)) cell = (Vector2) cells[Mathf.FloorToInt(GD.Randf() * cells.Count)];
             Player.Position = MapToWorld(cell);
             EntityMap[GridPosToEntityMapKey(cell)] = Player;
+        }
+
+        private void PlaceExitAwayFrom(Vector2 v)
+        {
+            var queue = new Queue<Vector2>();
+            queue.Enqueue(v);
+            var visited = new HashSet<int>();
+            var lastPos = v;
+            while (queue.Count > 0)
+            {
+                var size = queue.Count;
+                for (var i = 0; i < size; i++)
+                {
+                    var pos = queue.Dequeue();
+                    var key = GridPosToEntityMapKey(pos);
+                    if (visited.Contains(key)) continue;
+                    lastPos = pos;
+                    visited.Add(key);
+                    if (!IsWall(pos + Vector2.Left)) queue.Enqueue(pos + Vector2.Left);
+                    if (!IsWall(pos + Vector2.Right)) queue.Enqueue(pos + Vector2.Right);
+                    if (!IsWall(pos + Vector2.Up)) queue.Enqueue(pos + Vector2.Up);
+                    if (!IsWall(pos + Vector2.Down)) queue.Enqueue(pos + Vector2.Down);
+                }
+            }
+
+            SetCellv(lastPos, ExitTile);
+            Exit.Position = MapToWorld(lastPos);
+            EntityMap[GridPosToEntityMapKey(lastPos)] = Exit;
         }
 
         private int GridPosToEntityMapKey(Vector2 v)
@@ -100,7 +140,7 @@ namespace MiniAbyss.Games
         {
             // Initialize walls
             var m = new int[dim * dim];
-            for (var i = 0; i < m.Length; i++) m[i] = Wall;
+            for (var i = 0; i < m.Length; i++) m[i] = WallTile;
 
             // Compute end state
             var totalNeeded = Mathf.CeilToInt(dim * dim * coverage);
@@ -112,7 +152,7 @@ namespace MiniAbyss.Games
             // Make starting point
             int MakeRandAxis() => (int) (GD.Randf() * (dim - 2) + 1);
             var curr = new Vector2(MakeRandAxis(), MakeRandAxis());
-            m[VToI(curr)] = Empty;
+            m[VToI(curr)] = EmptyTile;
 
             void Walk(Vector2 dir)
             {
@@ -120,8 +160,8 @@ namespace MiniAbyss.Games
                 if (nv.x < 0 || nv.x >= dim|| nv.y < 0 || nv.y >= dim) return;
                 curr = nv;
                 var i = VToI(curr);
-                if (m[i] != Wall) return;
-                m[i] = Empty;
+                if (m[i] != WallTile) return;
+                m[i] = EmptyTile;
                 n++;
             }
 

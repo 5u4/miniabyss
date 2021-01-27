@@ -1,15 +1,17 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Instances/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Games/BattleGrid.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Games/BattleCamera.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/Level.cs" type="Script" id=4]
+[ext_resource path="res://Instances/Exit.tscn" type="PackedScene" id=5]
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 4 )
 
 [node name="BattleGrid" parent="." instance=ExtResource( 2 )]
 PlayerPath = NodePath("Player")
+ExitPath = NodePath("Exit")
 
 [node name="Player" parent="BattleGrid" instance=ExtResource( 1 )]
 BattleGridPath = NodePath("..")
@@ -20,3 +22,6 @@ smoothing_enabled = true
 editor_draw_limits = true
 editor_draw_drag_margin = true
 BattleGridPath = NodePath("../..")
+
+[node name="Exit" parent="BattleGrid" instance=ExtResource( 5 )]
+BattleGridPath = NodePath("..")
