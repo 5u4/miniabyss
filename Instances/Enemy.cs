@@ -1,6 +1,6 @@
 namespace MiniAbyss.Instances
 {
-    public class Enemy : Entity
+    public class Enemy : Creature
     {
     }
 }

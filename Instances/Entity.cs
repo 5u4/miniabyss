@@ -7,6 +7,8 @@ namespace MiniAbyss.Instances
     {
         [Export] public NodePath BattleGridPath;
 
+        public const int SpriteDimension = 8;
+
         public BattleGrid BattleGrid;
         public Node2D SpritePivot;
         public Sprite Sprite;
@@ -15,7 +17,7 @@ namespace MiniAbyss.Instances
 
         // Stats
         public int Health;
-        public int Attack;
+        public int Strength;
         public int Defence;
 
         public override void _Ready()
@@ -26,31 +28,6 @@ namespace MiniAbyss.Instances
             AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
             Tween = GetNode<Tween>("Tween");
 
-            AnimationPlayer.Play("Idle");
-        }
-
-        public async void Move(Vector2 dir)
-        {
-            SetProcess(false);
-            AnimationPlayer.Play("Move");
-            var initialVal = SpritePivot.Position - dir * 8;
-            var finalVal = SpritePivot.Position;
-            Tween.InterpolateProperty(SpritePivot, "position", initialVal, finalVal,
-                AnimationPlayer.CurrentAnimationLength, Tween.TransitionType.Quad);
-            Tween.Start();
-            Position += dir * 8;
-            SpritePivot.Position = initialVal;
-            await ToSignal(AnimationPlayer, "animation_finished");
-            SetProcess(true);
-            AnimationPlayer.Play("Idle");
-        }
-
-        public async void Bump()
-        {
-            SetProcess(false);
-            AnimationPlayer.Play("Bump");
-            await ToSignal(AnimationPlayer, "animation_finished");
-            SetProcess(true);
             AnimationPlayer.Play("Idle");
         }
     }

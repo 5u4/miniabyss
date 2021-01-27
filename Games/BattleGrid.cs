@@ -7,7 +7,7 @@ namespace MiniAbyss.Games
     public class BattleGrid : TileMap
     {
         [Signal]
-        public delegate void OnGenerateMap();
+        public delegate void GenerateMapSignal();
 
         [Export] public NodePath EnemiesPath;
         [Export] public NodePath PlayerPath;
@@ -55,10 +55,10 @@ namespace MiniAbyss.Games
                                                      GD.Randf() * EnemyAmountToDimensionUpperRatio));
             PlaceEnemies(enemyAmount);
             CenterGridInViewport();
-            EmitSignal(nameof(OnGenerateMap));
+            EmitSignal(nameof(GenerateMapSignal));
         }
 
-        public void HandleAction(Entity e, Vector2 dir)
+        public void HandleAction(Creature e, Vector2 dir)
         {
             var srcCell = WorldToMap(e.Position);
             var destCell = srcCell + dir;
@@ -73,7 +73,22 @@ namespace MiniAbyss.Games
             var canMove = true;
             if (EntityMap.ContainsKey(destCellKey))
             {
-                if (EntityMap[destCellKey] is Exit) GD.Print("Exit"); // TODO: Handle exit
+                var destEntity = EntityMap[destCellKey];
+                switch (destEntity)
+                {
+                    case Exit _:
+                        GD.Print("Exit"); // TODO: Handle exit
+                        break;
+                    case Creature creature:
+                        canMove = false;
+                        if (creature.Faction == e.Faction)
+                        {
+                            e.Bump();
+                            return;
+                        }
+                        e.Attack(creature);
+                        break;
+                }
             }
 
             if (!canMove) return;

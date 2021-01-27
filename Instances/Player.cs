@@ -2,7 +2,7 @@ using Godot;
 
 namespace MiniAbyss.Instances
 {
-    public class Player : Entity
+    public class Player : Creature
     {
         public override void _Process(float delta)
         {
