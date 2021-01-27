@@ -36,7 +36,7 @@ namespace MiniAbyss.Instances
             var initialVal = SpritePivot.Position - dir * 8;
             var finalVal = SpritePivot.Position;
             Tween.InterpolateProperty(SpritePivot, "position", initialVal, finalVal,
-                AnimationPlayer.CurrentAnimationLength);
+                AnimationPlayer.CurrentAnimationLength, Tween.TransitionType.Quad);
             Tween.Start();
             Position += dir * 8;
             SpritePivot.Position = initialVal;
