@@ -46,12 +46,27 @@ namespace MiniAbyss.Games
 
         public void HandleAction(Entity e, Vector2 dir)
         {
-            if (IsWall(WorldToMap(e.Position) + dir))
+            var srcCell = WorldToMap(e.Position);
+            var destCell = srcCell + dir;
+            if (IsWall(destCell))
             {
                 e.Bump();
                 return;
             }
+
+            var srcCellKey = GridPosToEntityMapKey(srcCell);
+            var destCellKey = GridPosToEntityMapKey(destCell);
+            var canMove = true;
+            if (EntityMap.ContainsKey(destCellKey))
+            {
+                if (EntityMap[destCellKey] is Exit) GD.Print("Exit"); // TODO: Handle exit
+            }
+
+            if (!canMove) return;
             e.Move(dir);
+            if (srcCellKey == destCellKey) return;
+            EntityMap.Remove(srcCellKey);
+            EntityMap[destCellKey] = e;
         }
 
         private bool IsWall(Vector2 v)
