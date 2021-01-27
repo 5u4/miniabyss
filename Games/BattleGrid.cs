@@ -6,6 +6,9 @@ namespace MiniAbyss.Games
 {
     public class BattleGrid : TileMap
     {
+        [Signal]
+        public delegate void OnGenerateMap();
+
         [Export] public NodePath PlayerPath;
         public Player Player;
         public const int MapEnlargeSize = 3;
@@ -30,12 +33,26 @@ namespace MiniAbyss.Games
             GD.Randomize();
             var m = CrawlEmptySpaces(dim, coverage);
             SetTilesWithMap(m, dim, offset);
+            CenterGridInViewport();
+            EmitSignal(nameof(OnGenerateMap));
         }
 
         public void HandleAction(Entity e, Vector2 dir)
         {
             // TODO
             e.Move(dir);
+        }
+
+        private void CenterGridInViewport()
+        {
+            var gSize = GetUsedRect().Size * CellSize;
+            var vSize = GetViewportRect().Size;
+            var xDiff = vSize.x - gSize.x;
+            var yDiff = vSize.y - gSize.y;
+            var newPos = new Vector2(Position);
+            if (xDiff > 0) newPos.x = xDiff / 2;
+            if (yDiff <= 0) newPos.y = -yDiff / 2;
+            Position = newPos;
         }
 
         private void SetTilesWithMap(IReadOnlyList<int> m, int dim, int offset)

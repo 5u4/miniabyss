@@ -11,6 +11,7 @@ namespace MiniAbyss.Games
         {
             BattleGrid = GetNode<BattleGrid>(BattleGridPath);
 
+            BattleGrid.Connect(nameof(BattleGrid.OnGenerateMap), this, nameof(SetLimitsBasedOnBattleGrid));
             SetLimitsBasedOnBattleGrid();
         }
 
@@ -22,7 +23,7 @@ namespace MiniAbyss.Games
             LimitLeft = Mathf.FloorToInt(Mathf.Min(vRect.Position.x, gRect.Position.x * csize.x));
             LimitRight = Mathf.FloorToInt(Mathf.Max(vRect.End.x, gRect.End.x * csize.x));
             LimitTop = Mathf.FloorToInt(Mathf.Min(vRect.Position.y, gRect.Position.y * csize.y));
-            LimitBottom = Mathf.FloorToInt(Mathf.Min(vRect.End.y, gRect.End.y * csize.y));
+            LimitBottom = Mathf.FloorToInt(Mathf.Max(vRect.End.y, gRect.End.y * csize.y));
         }
     }
 }
