@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Godot;
+using MiniAbyss.Data;
 using MiniAbyss.Instances;
 
 namespace MiniAbyss.Games
@@ -21,7 +22,6 @@ namespace MiniAbyss.Games
         [Export] public NodePath EnemiesPath;
         [Export] public NodePath PlayerPath;
         [Export] public NodePath ExitPath;
-        [Export] public PackedScene EnemyScene;
 
         public const int MapEnlargeSize = 3;
         public const int WallTile = -1;
@@ -74,6 +74,11 @@ namespace MiniAbyss.Games
         public void OnPlayerTurnEnded()
         {
             EnemyEndedCounter = Enemies.GetChildCount();
+            if (EnemyEndedCounter == 0)
+            {
+                EmitSignal(nameof(EnemyTurnEndedSignal));
+                return;
+            }
             foreach (Enemy e in Enemies.GetChildren()) HandleAction(e, e.Act());
         }
 
@@ -179,6 +184,7 @@ namespace MiniAbyss.Games
         {
             var playerPos = WorldToMap(Player.Position);
             var emptyCells = GetUsedCells();
+            var enemyKinds = new[] {EnemyKind.Skull}; // TODO generate kinds based on level
             for (var i = 0; i < amount; i++)
             {
                 var p = (Vector2) emptyCells[Mathf.FloorToInt(GD.Randf() * emptyCells.Count)];
@@ -191,7 +197,8 @@ namespace MiniAbyss.Games
                     key = GridPosToEntityMapKey(p);
                 }
 
-                var e = MakeEnemy();
+                var kind = enemyKinds[Mathf.FloorToInt(GD.Randf() * enemyKinds.Length)];
+                var e = Enemy.Make(kind);
                 e.BattleGridPath = GetPath();
                 Enemies.AddChild(e);
                 e.Position = MapToWorld(p);
@@ -225,12 +232,6 @@ namespace MiniAbyss.Games
             }
 
             return dist;
-        }
-
-        private Enemy MakeEnemy()
-        {
-            // TODO Make enemy type
-            return (Enemy) EnemyScene.Instance();
         }
 
         private int GridPosToEntityMapKey(Vector2 v)

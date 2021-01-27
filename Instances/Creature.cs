@@ -8,6 +8,7 @@ namespace MiniAbyss.Instances
         [Export] public Faction Faction;
         [Export] public PackedScene DamagePopTextScene;
 
+        public string Display;
         public int Health = 5;
         public int Strength;
         public int Defence;

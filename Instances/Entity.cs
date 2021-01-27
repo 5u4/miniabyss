@@ -6,6 +6,7 @@ namespace MiniAbyss.Instances
     public abstract class Entity : Node2D
     {
         [Export] public NodePath BattleGridPath;
+        [Export] public Resource SpriteFramesResource;
 
         public const int SpriteDimension = 8;
 
@@ -22,6 +23,8 @@ namespace MiniAbyss.Instances
             AnimatedSprite = GetNode<AnimatedSprite>("SpritePivot/Sprite");
             AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
             Tween = GetNode<Tween>("Tween");
+
+            AnimatedSprite.Frames = (SpriteFrames) SpriteFramesResource;
             AnimatedSprite.Play();
 
             AnimationPlayer.Play("Idle");
