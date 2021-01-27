@@ -15,11 +15,6 @@ namespace MiniAbyss.Instances
         public AnimationPlayer AnimationPlayer;
         public Tween Tween;
 
-        // Stats
-        public int Health;
-        public int Strength;
-        public int Defence;
-
         public override void _Ready()
         {
             BattleGrid = GetNode<BattleGrid>(BattleGridPath);

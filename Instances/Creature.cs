@@ -1,10 +1,16 @@
 using Godot;
+using MiniAbyss.Hud;
 
 namespace MiniAbyss.Instances
 {
     public class Creature : Entity
     {
         [Export] public Faction Faction;
+        [Export] public PackedScene DamagePopTextScene;
+
+        public int Health;
+        public int Strength;
+        public int Defence;
 
         public async void Move(Vector2 dir)
         {
@@ -52,7 +58,13 @@ namespace MiniAbyss.Instances
         private async void Hit(int amount, Creature dealer)
         {
             AnimationPlayer.Play("Move");
-            Health -= Mathf.Max(1, amount - Defence);
+            var finalDmgAmount = Mathf.Max(1, amount - Defence);
+            Health -= finalDmgAmount;
+
+            var popText = (DamagePopText) DamagePopTextScene.Instance();
+            GetTree().CurrentScene.AddChild(popText);
+            popText.Pop(-finalDmgAmount, GlobalPosition);
+
             await ToSignal(AnimationPlayer, "animation_finished");
             AnimationPlayer.Play("Idle");
             DeathCheck();
