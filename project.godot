@@ -58,5 +58,5 @@ move_down={
 
 [rendering]
 
-environment/default_clear_color=Color( 0.156863, 0.172549, 0.203922, 1 )
+environment/default_clear_color=Color( 0.054902, 0.027451, 0.105882, 1 )
 environment/default_environment="res://default_env.tres"
