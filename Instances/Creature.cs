@@ -8,13 +8,17 @@ namespace MiniAbyss.Instances
         [Export] public Faction Faction;
         [Export] public PackedScene DamagePopTextScene;
 
-        public int Health;
+        public int Health = 5;
         public int Strength;
         public int Defence;
 
+        public virtual void OnActionFinished()
+        {
+            AnimationPlayer.Play("Idle");
+        }
+
         public async void Move(Vector2 dir)
         {
-            SetProcess(false);
             AnimationPlayer.Play("Move");
             var initialVal = SpritePivot.Position - dir * SpriteDimension;
             var finalVal = SpritePivot.Position;
@@ -24,13 +28,11 @@ namespace MiniAbyss.Instances
             Position += dir * SpriteDimension;
             SpritePivot.Position = initialVal;
             await ToSignal(AnimationPlayer, "animation_finished");
-            SetProcess(true);
-            AnimationPlayer.Play("Idle");
+            OnActionFinished();
         }
 
         public async void Attack(Creature target)
         {
-            SetProcess(false);
             AnimationPlayer.Play("Move");
             var dir = (Position - target.Position).Normalized();
             var initialVal = SpritePivot.Position;
@@ -44,9 +46,8 @@ namespace MiniAbyss.Instances
                 secondDuration, Tween.TransitionType.Bounce, Tween.EaseType.InOut, firstDuration);
             Tween.Start();
             Damage(target);
-            await ToSignal(Tween, "tween_all_completed");
-            SetProcess(true);
-            AnimationPlayer.Play("Idle");
+            await ToSignal(AnimationPlayer, "animation_finished");
+            OnActionFinished();
         }
 
         public void Damage(Creature target)
@@ -55,7 +56,7 @@ namespace MiniAbyss.Instances
             target.Hit(amount, this);
         }
 
-        private async void Hit(int amount, Creature dealer)
+        public async void Hit(int amount, Creature dealer)
         {
             AnimationPlayer.Play("Move");
             var finalDmgAmount = Mathf.Max(1, amount - Defence);
@@ -72,19 +73,17 @@ namespace MiniAbyss.Instances
 
         public async void Bump()
         {
-            SetProcess(false);
             AnimationPlayer.Play("Bump");
             await ToSignal(AnimationPlayer, "animation_finished");
-            SetProcess(true);
-            AnimationPlayer.Play("Idle");
+            OnActionFinished();
         }
 
-        private void DeathCheck()
+        public void DeathCheck()
         {
             if (Health <= 0) OnDeath();
         }
 
-        private void OnDeath()
+        public void OnDeath()
         {
             // TODO
             GD.Print("Death");

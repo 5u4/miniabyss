@@ -9,6 +9,15 @@ namespace MiniAbyss.Games
         [Signal]
         public delegate void GenerateMapSignal();
 
+        [Signal]
+        public delegate void PlayerTurnEndedSignal();
+
+        [Signal]
+        public delegate void OneEnemyTurnEndedSignal();
+
+        [Signal]
+        public delegate void EnemyTurnEndedSignal();
+
         [Export] public NodePath EnemiesPath;
         [Export] public NodePath PlayerPath;
         [Export] public NodePath ExitPath;
@@ -26,12 +35,16 @@ namespace MiniAbyss.Games
         public Player Player;
         public Exit Exit;
         public Dictionary<int, Entity> EntityMap;
+        public int EnemyEndedCounter;
 
         public override void _Ready()
         {
             Enemies = GetNode<Node2D>(EnemiesPath);
             Player = GetNode<Player>(PlayerPath);
             Exit = GetNode<Exit>(ExitPath);
+
+            Connect(nameof(PlayerTurnEndedSignal), this, nameof(OnPlayerTurnEnded));
+            Connect(nameof(OneEnemyTurnEndedSignal), this, nameof(OnOneEnemyTurnEnded));
         }
 
         public override void _Process(float delta)
@@ -56,6 +69,18 @@ namespace MiniAbyss.Games
             PlaceEnemies(enemyAmount);
             CenterGridInViewport();
             EmitSignal(nameof(GenerateMapSignal));
+        }
+
+        public void OnPlayerTurnEnded()
+        {
+            EnemyEndedCounter = Enemies.GetChildCount();
+            foreach (Enemy e in Enemies.GetChildren()) HandleAction(e, e.Act());
+        }
+
+        public void OnOneEnemyTurnEnded()
+        {
+            EnemyEndedCounter--;
+            if (EnemyEndedCounter <= 0) EmitSignal(nameof(EnemyTurnEndedSignal));
         }
 
         public void HandleAction(Creature e, Vector2 dir)
