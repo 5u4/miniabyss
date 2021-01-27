@@ -22,12 +22,6 @@ namespace MiniAbyss.Games
             Player = GetNode<Player>(PlayerPath);
         }
 
-        public override void _Process(float delta)
-        {
-            base._Process(delta);
-            if (Input.IsActionJustPressed("ui_accept")) Generate(5, 1, 0.5f);
-        }
-
         public void Generate(int dim, int offset, float coverage)
         {
             GD.Randomize();
@@ -39,7 +33,11 @@ namespace MiniAbyss.Games
 
         public void HandleAction(Entity e, Vector2 dir)
         {
-            // TODO
+            if (GetCellv(WorldToMap(e.Position) + dir) == Wall)
+            {
+                e.Bump();
+                return;
+            }
             e.Move(dir);
         }
 

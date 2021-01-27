@@ -44,5 +44,14 @@ namespace MiniAbyss.Instances
             SetProcess(true);
             AnimationPlayer.Play("Idle");
         }
+
+        public async void Bump()
+        {
+            SetProcess(false);
+            AnimationPlayer.Play("Bump");
+            await ToSignal(AnimationPlayer, "animation_finished");
+            SetProcess(true);
+            AnimationPlayer.Play("Idle");
+        }
     }
 }
