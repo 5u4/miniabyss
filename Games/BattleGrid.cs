@@ -123,6 +123,12 @@ namespace MiniAbyss.Games
             EntityMap[destCellKey] = e;
         }
 
+        public void RemoveEntity(Entity e)
+        {
+            var key = GridPosToEntityMapKey(WorldToMap(e.Position));
+            if (EntityMap.ContainsKey(key)) EntityMap.Remove(key);
+        }
+
         private bool IsWall(Vector2 v)
         {
             return GetCellv(v) == WallTile

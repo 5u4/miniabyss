@@ -21,6 +21,12 @@ namespace MiniAbyss.Instances
             BattleGrid.EmitSignal(nameof(Games.BattleGrid.PlayerTurnEndedSignal));
         }
 
+        public override void OnDeath()
+        {
+            base.OnDeath();
+            // TODO: Handle game over
+        }
+
         private void OnEnemyTurnEnded()
         {
             SetProcess(true);

@@ -78,15 +78,26 @@ namespace MiniAbyss.Instances
             OnActionFinished();
         }
 
-        public void DeathCheck()
+        public bool IsDead()
         {
-            if (Health <= 0) OnDeath();
+            return Health <= 0;
         }
 
-        public void OnDeath()
+        public void DeathCheck()
         {
-            // TODO
-            GD.Print("Death");
+            if (IsDead()) OnDeath();
+        }
+
+        public async virtual void OnDeath()
+        {
+            AnimationPlayer.Play("Bump");
+            var initialVal = Sprite.Modulate;
+            var finalVal = Colors.Transparent;
+            Tween.InterpolateProperty(Sprite, "modulate", initialVal, finalVal, AnimationPlayer.CurrentAnimationLength);
+            Tween.Start();
+            await ToSignal(AnimationPlayer, "animation_finished");
+            BattleGrid.RemoveEntity(this);
+            QueueFree();
         }
     }
 }
