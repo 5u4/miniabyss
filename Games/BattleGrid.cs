@@ -22,14 +22,14 @@ namespace MiniAbyss.Games
         public override void _Process(float delta)
         {
             base._Process(delta);
-            if (Input.IsActionJustPressed("ui_accept")) Generate(5, 0.5f);
+            if (Input.IsActionJustPressed("ui_accept")) Generate(5, 1, 0.5f);
         }
 
-        public void Generate(int dim, float coverage)
+        public void Generate(int dim, int offset, float coverage)
         {
             GD.Randomize();
             var m = CrawlEmptySpaces(dim, coverage);
-            SetTilesWithMap(m, dim);
+            SetTilesWithMap(m, dim, offset);
         }
 
         public void HandleAction(Entity e, Vector2 dir)
@@ -38,7 +38,7 @@ namespace MiniAbyss.Games
             e.Move(dir);
         }
 
-        private void SetTilesWithMap(IReadOnlyList<int> m, int dim)
+        private void SetTilesWithMap(IReadOnlyList<int> m, int dim, int offset)
         {
             for (var i = 0; i < m.Count; i++)
             {
@@ -46,7 +46,7 @@ namespace MiniAbyss.Games
                 var c = Mathf.FloorToInt((float) i / dim);
                 for (var ii = 0; ii < MapEnlargeSize; ii++)
                 for (var jj = 0; jj < MapEnlargeSize; jj++)
-                    SetCell(r * MapEnlargeSize + jj, c * MapEnlargeSize + ii, m[i]);
+                    SetCell(r * MapEnlargeSize + jj + offset, c * MapEnlargeSize + ii + offset, m[i]);
             }
 
             UpdateBitmaskRegion(Vector2.Zero, new Vector2(dim * MapEnlargeSize, dim * MapEnlargeSize));
@@ -74,7 +74,7 @@ namespace MiniAbyss.Games
             void Walk(Vector2 dir)
             {
                 var nv = curr + dir;
-                if (nv.x < 0 || nv.x >= dim || nv.y < 0 || nv.y >= dim) return;
+                if (nv.x < 0 || nv.x >= dim|| nv.y < 0 || nv.y >= dim) return;
                 curr = nv;
                 var i = VToI(curr);
                 if (m[i] != Wall) return;
