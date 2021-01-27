@@ -9,18 +9,27 @@ namespace MiniAbyss.Games
         [Signal]
         public delegate void OnGenerateMap();
 
+        [Export] public NodePath EnemiesPath;
         [Export] public NodePath PlayerPath;
         [Export] public NodePath ExitPath;
-        public Player Player;
-        public Exit Exit;
+        [Export] public PackedScene EnemyScene;
+
         public const int MapEnlargeSize = 3;
         public const int WallTile = -1;
         public const int EmptyTile = 0;
         public const int ExitTile = 1;
+        public const float EnemyAmountToDimensionUpperRatio = 0.1f;
+        public const float EnemyAmountToDimensionLowerRatio = 0.4f;
+        public const int EnemySpawnMinDistanceBetweenPlayer = 5;
+
+        public Node2D Enemies;
+        public Player Player;
+        public Exit Exit;
         public Dictionary<int, Entity> EntityMap;
 
         public override void _Ready()
         {
+            Enemies = GetNode<Node2D>(EnemiesPath);
             Player = GetNode<Player>(PlayerPath);
             Exit = GetNode<Exit>(ExitPath);
         }
@@ -34,12 +43,17 @@ namespace MiniAbyss.Games
 
         public void Generate(int dim, int offset, float coverage)
         {
+            foreach (Node child in Enemies.GetChildren()) Enemies.RemoveChild(child);
             EntityMap = new Dictionary<int, Entity>();
+
             GD.Randomize();
             var m = CrawlEmptySpaces(dim, coverage);
             SetTilesWithMap(m, dim, offset);
             PlacePlayer();
             PlaceExitAwayFrom(WorldToMap(Player.Position));
+            var enemyAmount = Mathf.RoundToInt(dim * (EnemyAmountToDimensionLowerRatio +
+                                                     GD.Randf() * EnemyAmountToDimensionUpperRatio));
+            PlaceEnemies(enemyAmount);
             CenterGridInViewport();
             EmitSignal(nameof(OnGenerateMap));
         }
@@ -113,6 +127,64 @@ namespace MiniAbyss.Games
             SetCellv(lastPos, ExitTile);
             Exit.Position = MapToWorld(lastPos);
             EntityMap[GridPosToEntityMapKey(lastPos)] = Exit;
+        }
+
+        private void PlaceEnemies(int amount)
+        {
+            var playerPos = WorldToMap(Player.Position);
+            var emptyCells = GetUsedCells();
+            for (var i = 0; i < amount; i++)
+            {
+                var p = (Vector2) emptyCells[Mathf.FloorToInt(GD.Randf() * emptyCells.Count)];
+                var key = GridPosToEntityMapKey(p);
+                while (IsWall(p) || EntityMap.ContainsKey(key) ||
+                       DistanceBetweenOver(p, playerPos, EnemySpawnMinDistanceBetweenPlayer) <
+                       EnemySpawnMinDistanceBetweenPlayer)
+                {
+                    p = (Vector2) emptyCells[Mathf.FloorToInt(GD.Randf() * emptyCells.Count)];
+                    key = GridPosToEntityMapKey(p);
+                }
+
+                var e = MakeEnemy();
+                e.BattleGridPath = GetPath();
+                Enemies.AddChild(e);
+                e.Position = MapToWorld(p);
+                EntityMap[GridPosToEntityMapKey(p)] = e;
+            }
+        }
+
+        private int DistanceBetweenOver(Vector2 v1, Vector2 v2, int maxCap)
+        {
+            var queue = new Queue<Vector2>();
+            queue.Enqueue(v1);
+            var visited = new HashSet<int>();
+            var dist = 0;
+            while (queue.Count > 0 && dist < maxCap)
+            {
+                var size = queue.Count;
+                for (var i = 0; i < size; i++)
+                {
+                    var pos = queue.Dequeue();
+                    if (pos.Equals(v2)) return dist;
+                    var key = GridPosToEntityMapKey(pos);
+                    if (visited.Contains(key)) continue;
+                    visited.Add(key);
+                    if (!IsWall(pos + Vector2.Left)) queue.Enqueue(pos + Vector2.Left);
+                    if (!IsWall(pos + Vector2.Right)) queue.Enqueue(pos + Vector2.Right);
+                    if (!IsWall(pos + Vector2.Up)) queue.Enqueue(pos + Vector2.Up);
+                    if (!IsWall(pos + Vector2.Down)) queue.Enqueue(pos + Vector2.Down);
+                }
+
+                dist++;
+            }
+
+            return dist;
+        }
+
+        private Enemy MakeEnemy()
+        {
+            // TODO Make enemy type
+            return (Enemy) EnemyScene.Instance();
         }
 
         private int GridPosToEntityMapKey(Vector2 v)
