@@ -11,7 +11,7 @@ namespace MiniAbyss.Instances
 
         public BattleGrid BattleGrid;
         public Node2D SpritePivot;
-        public Sprite Sprite;
+        public AnimatedSprite AnimatedSprite;
         public AnimationPlayer AnimationPlayer;
         public Tween Tween;
 
@@ -19,9 +19,10 @@ namespace MiniAbyss.Instances
         {
             BattleGrid = GetNode<BattleGrid>(BattleGridPath);
             SpritePivot = GetNode<Node2D>("SpritePivot");
-            Sprite = GetNode<Sprite>("SpritePivot/Sprite");
+            AnimatedSprite = GetNode<AnimatedSprite>("SpritePivot/Sprite");
             AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
             Tween = GetNode<Tween>("Tween");
+            AnimatedSprite.Play();
 
             AnimationPlayer.Play("Idle");
         }

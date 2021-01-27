@@ -91,9 +91,9 @@ namespace MiniAbyss.Instances
         public async virtual void OnDeath()
         {
             AnimationPlayer.Play("Bump");
-            var initialVal = Sprite.Modulate;
+            var initialVal = AnimatedSprite.Modulate;
             var finalVal = Colors.Transparent;
-            Tween.InterpolateProperty(Sprite, "modulate", initialVal, finalVal, AnimationPlayer.CurrentAnimationLength);
+            Tween.InterpolateProperty(AnimatedSprite, "modulate", initialVal, finalVal, AnimationPlayer.CurrentAnimationLength);
             Tween.Start();
             await ToSignal(AnimationPlayer, "animation_finished");
             BattleGrid.RemoveEntity(this);

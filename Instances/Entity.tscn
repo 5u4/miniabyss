@@ -12,7 +12,7 @@ script = ExtResource( 4 )
 [node name="SpritePivot" type="Node2D" parent="."]
 position = Vector2( 4, 4 )
 
-[node name="Sprite" type="Sprite" parent="SpritePivot"]
+[node name="Sprite" type="AnimatedSprite" parent="SpritePivot"]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Reset"
