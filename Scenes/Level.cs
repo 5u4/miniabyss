@@ -14,7 +14,7 @@ namespace MiniAbyss.Scenes
         public override void _Ready()
         {
             BattleGrid = GetNode<BattleGrid>("BattleGrid");
-            Player = GetNode<Player>("Player");
+            Player = GetNode<Player>("BattleGrid/Player");
 
             InitializeLevel();
         }

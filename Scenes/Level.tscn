@@ -9,14 +9,14 @@
 script = ExtResource( 4 )
 
 [node name="BattleGrid" parent="." instance=ExtResource( 2 )]
-PlayerPath = NodePath("../Player")
+PlayerPath = NodePath("Player")
 
-[node name="Player" parent="." instance=ExtResource( 1 )]
-BattleGridPath = NodePath("../BattleGrid")
+[node name="Player" parent="BattleGrid" instance=ExtResource( 1 )]
+BattleGridPath = NodePath("..")
 
-[node name="BattleCamera" parent="Player" instance=ExtResource( 3 )]
+[node name="BattleCamera" parent="BattleGrid/Player" instance=ExtResource( 3 )]
 current = true
 smoothing_enabled = true
 editor_draw_limits = true
 editor_draw_drag_margin = true
-BattleGridPath = NodePath("../../BattleGrid")
+BattleGridPath = NodePath("../..")

@@ -14,12 +14,12 @@ namespace MiniAbyss.Games
         public const int MapEnlargeSize = 3;
         public const int Wall = -1;
         public const int Empty = 0;
-
-        public Vector2 StartingPoint;
+        public Dictionary<int, Entity> EntityMap;
 
         public override void _Ready()
         {
             Player = GetNode<Player>(PlayerPath);
+            EntityMap = new Dictionary<int, Entity>();
         }
 
         public void Generate(int dim, int offset, float coverage)
@@ -27,18 +27,47 @@ namespace MiniAbyss.Games
             GD.Randomize();
             var m = CrawlEmptySpaces(dim, coverage);
             SetTilesWithMap(m, dim, offset);
+            PlacePlayer();
             CenterGridInViewport();
             EmitSignal(nameof(OnGenerateMap));
         }
 
         public void HandleAction(Entity e, Vector2 dir)
         {
-            if (GetCellv(WorldToMap(e.Position) + dir) == Wall)
+            if (IsWall(WorldToMap(e.Position) + dir))
             {
                 e.Bump();
                 return;
             }
             e.Move(dir);
+        }
+
+        private bool IsWall(Vector2 v)
+        {
+            return GetCellv(v) == Wall
+                   || GetCellv(v + new Vector2(1, 1)) == Wall
+                   || GetCellv(v + new Vector2(1, -1)) == Wall
+                   || GetCellv(v + new Vector2(-1, 1)) == Wall
+                   || GetCellv(v + new Vector2(-1, -1)) == Wall;
+        }
+
+        private void PlacePlayer()
+        {
+            var cells = GetUsedCells();
+            var cell = (Vector2) cells[Mathf.FloorToInt(GD.Randf() * cells.Count)];
+            while (IsWall(cell)) cell = (Vector2) cells[Mathf.FloorToInt(GD.Randf() * cells.Count)];
+            Player.Position = MapToWorld(cell);
+            EntityMap[GridPosToEntityMapKey(cell)] = Player;
+        }
+
+        private int GridPosToEntityMapKey(Vector2 v)
+        {
+            return Mathf.FloorToInt(v.x * 1000) + Mathf.FloorToInt(v.y);
+        }
+
+        private Vector2 EntityMapKeyToGridPos(int id)
+        {
+            return new Vector2(id / 1000, id % 1000);
         }
 
         private void CenterGridInViewport()
@@ -75,15 +104,14 @@ namespace MiniAbyss.Games
 
             // Compute end state
             var totalNeeded = Mathf.CeilToInt(dim * dim * coverage);
-            var n = 0;
+            var n = 1;
 
             // Define local helpers
             int VToI(Vector2 v) => (int) (v.x * dim + v.y);
 
             // Make starting point
             int MakeRandAxis() => (int) (GD.Randf() * (dim - 2) + 1);
-            StartingPoint = new Vector2(MakeRandAxis(), MakeRandAxis());
-            var curr = new Vector2(StartingPoint);
+            var curr = new Vector2(MakeRandAxis(), MakeRandAxis());
             m[VToI(curr)] = Empty;
 
             void Walk(Vector2 dir)
