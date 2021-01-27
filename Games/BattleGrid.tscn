@@ -6,5 +6,6 @@
 [node name="BattleGrid" type="TileMap"]
 tile_set = ExtResource( 2 )
 cell_size = Vector2( 8, 8 )
+cell_quadrant_size = 8
 format = 1
 script = ExtResource( 1 )
