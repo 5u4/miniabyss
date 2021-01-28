@@ -67,17 +67,18 @@ namespace MiniAbyss.Games
             foreach (Node child in Enemies.GetChildren()) Enemies.RemoveChild(child);
             EntityMap = new Dictionary<int, Entity>();
 
-            GD.Randomize();
+            Rng.Instance.G.Randomize();
+            Rng.Instance.R.Randomize();
             var m = CrawlEmptySpaces(dim, coverage);
             SetTilesWithMap(m, dim, offset);
             PlacePlayer();
             PlaceExitAwayFrom(WorldToMap(Player.Position));
             var enemyAmount = Mathf.RoundToInt(dim * (EnemyAmountToDimensionLowerRatio +
-                                                     GD.Randf() * EnemyAmountToDimensionUpperRatio));
+                                                     Rng.Instance.G.Randf() * EnemyAmountToDimensionUpperRatio));
             PlaceEntityAwayFromPlayer(enemyAmount, MakeEnemy, EnemySpawnMinDistanceBetweenPlayer);
             var potionAmount =
                 Mathf.RoundToInt(dim * (PotionAmountToDimensionLowerRatio +
-                                        GD.Randf() * PotionAmountToDimensionUpperRatio));
+                                        Rng.Instance.G.Randf() * PotionAmountToDimensionUpperRatio));
             PlaceEntityAwayFromPlayer(potionAmount, MakePotion, PotionSpawnMinDistanceBetweenPlayer);
             CenterGridInViewport();
             EmitSignal(nameof(GenerateMapSignal));
@@ -170,8 +171,8 @@ namespace MiniAbyss.Games
         private void PlacePlayer()
         {
             var cells = GetUsedCells();
-            var cell = (Vector2) cells[Mathf.FloorToInt(GD.Randf() * cells.Count)];
-            while (IsWall(cell)) cell = (Vector2) cells[Mathf.FloorToInt(GD.Randf() * cells.Count)];
+            var cell = (Vector2) cells[Mathf.FloorToInt(Rng.Instance.G.Randf() * cells.Count)];
+            while (IsWall(cell)) cell = (Vector2) cells[Mathf.FloorToInt(Rng.Instance.G.Randf() * cells.Count)];
             Player.Position = MapToWorld(cell);
             EntityMap[GridPosToEntityMapKey(cell)] = Player;
         }
@@ -210,12 +211,12 @@ namespace MiniAbyss.Games
             var emptyCells = GetUsedCells();
             for (var i = 0; i < amount; i++)
             {
-                var p = (Vector2) emptyCells[Mathf.FloorToInt(GD.Randf() * emptyCells.Count)];
+                var p = (Vector2) emptyCells[Mathf.FloorToInt(Rng.Instance.G.Randf() * emptyCells.Count)];
                 var key = GridPosToEntityMapKey(p);
                 while (IsWall(p) || EntityMap.ContainsKey(key) ||
                        DistanceBetweenOver(p, playerPos, minDist) < minDist)
                 {
-                    p = (Vector2) emptyCells[Mathf.FloorToInt(GD.Randf() * emptyCells.Count)];
+                    p = (Vector2) emptyCells[Mathf.FloorToInt(Rng.Instance.G.Randf() * emptyCells.Count)];
                     key = GridPosToEntityMapKey(p);
                 }
 
@@ -228,7 +229,7 @@ namespace MiniAbyss.Games
         private Enemy MakeEnemy()
         {
             var enemyKinds = new[] {EnemyKind.Skull}; // TODO generate kinds based on level
-            var kind = enemyKinds[Mathf.FloorToInt(GD.Randf() * enemyKinds.Length)];
+            var kind = enemyKinds[Mathf.FloorToInt(Rng.Instance.G.Randf() * enemyKinds.Length)];
             var e = Enemy.Make(kind);
             e.BattleGridPath = GetPath();
             Enemies.AddChild(e);
@@ -322,7 +323,7 @@ namespace MiniAbyss.Games
             int VToI(Vector2 v) => (int) (v.x * dim + v.y);
 
             // Make starting point
-            int MakeRandAxis() => (int) (GD.Randf() * (dim - 2) + 1);
+            int MakeRandAxis() => (int) (Rng.Instance.G.Randf() * (dim - 2) + 1);
             var curr = new Vector2(MakeRandAxis(), MakeRandAxis());
             m[VToI(curr)] = EmptyTile;
 
@@ -339,7 +340,7 @@ namespace MiniAbyss.Games
 
             while (n < totalNeeded)
             {
-                var walk = Mathf.FloorToInt(GD.Randf() * 4);
+                var walk = Mathf.FloorToInt(Rng.Instance.G.Randf() * 4);
                 if (walk == 0) Walk(Vector2.Left);
                 else if (walk == 1) Walk(Vector2.Right);
                 else if (walk == 2) Walk(Vector2.Up);

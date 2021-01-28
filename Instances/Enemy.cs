@@ -23,7 +23,7 @@ namespace MiniAbyss.Instances
         {
             // TODO: Add enemy ai
             if (IsDead()) return Vector2.Zero;
-            var dir = Mathf.FloorToInt(GD.Randf() * 4);
+            var dir = Mathf.FloorToInt(Rng.Instance.G.Randf() * 4);
             return dir == 0 ? Vector2.Left : dir == 1 ? Vector2.Right : dir == 2 ? Vector2.Up : Vector2.Down;
         }
 

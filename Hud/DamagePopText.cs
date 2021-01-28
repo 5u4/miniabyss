@@ -1,4 +1,5 @@
 using Godot;
+using MiniAbyss.Data;
 using MiniAbyss.Instances;
 
 namespace MiniAbyss.Hud
@@ -24,7 +25,7 @@ namespace MiniAbyss.Hud
                 Label.AddColorOverride("font_color",
                     amount < 0 ? new Color(1f, 0.33f, 0.33f) : new Color(0.33f, 1f, 0.33f));
             var initialVal = at;
-            var finalVal = at + new Vector2(GD.Randf() * 2 - 1, -8);
+            var finalVal = at + new Vector2(Rng.Instance.R.Randf() * 2 - 1, -8);
             Tween.InterpolateProperty(Label, "rect_global_position", initialVal, finalVal, 1f,
                 Tween.TransitionType.Back, Tween.EaseType.Out);
             Tween.Start();
