@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using MiniAbyss.Data;
 
@@ -32,7 +33,15 @@ namespace MiniAbyss.Hud
 
         private void OnMouseExited()
         {
+            if (MouseOverAnyArea()) return;
             PlayerData.Instance.EmitSignal(nameof(PlayerData.HideDescriptionSignal));
+        }
+
+        private bool MouseOverAnyArea()
+        {
+            var state = GetWorld2d().DirectSpaceState;
+            var res = state.IntersectPoint(GetGlobalMousePosition(), 1, null, uint.MaxValue, false, true);
+            return res.Count > 0;
         }
     }
 }
