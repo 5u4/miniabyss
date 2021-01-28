@@ -1,0 +1,80 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Hud/MoneyHud.cs" type="Script" id=1]
+[ext_resource path="res://Assets/Sprites/coin.png" type="Texture" id=2]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 8, 8 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 2 )
+region = Rect2( 8, 0, 8, 8 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 16, 0, 8, 8 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 2 )
+region = Rect2( 24, 0, 8, 8 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 2 )
+region = Rect2( 32, 0, 8, 8 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 2 )
+region = Rect2( 40, 0, 8, 8 )
+
+[sub_resource type="SpriteFrames" id=7]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"loop": true,
+"name": "default",
+"speed": 12.0
+} ]
+
+[node name="MoneyHud" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 96, 32 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 12.0
+margin_bottom = 8.0
+rect_min_size = Vector2( 48, 16 )
+rect_scale = Vector2( 2, 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Icon" type="Control" parent="HBoxContainer"]
+margin_right = 16.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="HBoxContainer/Icon"]
+scale = Vector2( 2, 2 )
+frames = SubResource( 7 )
+centered = false
+
+[node name="Amount" type="Control" parent="HBoxContainer"]
+margin_left = 20.0
+margin_right = 23.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 3, 16 )
+
+[node name="Label" type="Label" parent="HBoxContainer/Amount"]
+margin_right = 5.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 5, 16 )
+text = "0"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

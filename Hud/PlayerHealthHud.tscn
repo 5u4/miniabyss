@@ -46,18 +46,14 @@ animations = [ {
 } ]
 
 [node name="PlayerHealthHud" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+rect_min_size = Vector2( 108, 32 )
 script = ExtResource( 4 )
 __meta__ = {
-"_edit_use_anchors_": false
+"_edit_use_anchors_": true
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 55.0
-margin_bottom = 24.0
+rect_min_size = Vector2( 54, 16 )
 rect_scale = Vector2( 2, 2 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -95,7 +91,7 @@ margin_right = 5.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 5, 16 )
 text = "5"
-align = 1
+align = 2
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -129,7 +125,6 @@ margin_right = 5.0
 margin_bottom = 12.0
 rect_min_size = Vector2( 5, 16 )
 text = "5"
-align = 1
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false

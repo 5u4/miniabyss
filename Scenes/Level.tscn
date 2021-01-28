@@ -36,6 +36,22 @@ BattleGridPath = NodePath("../..")
 [node name="Exit" parent="BattleGrid" instance=ExtResource( 5 )]
 BattleGridPath = NodePath("..")
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="Hud" type="CanvasLayer" parent="."]
 
-[node name="PlayerHealth" parent="HUD" instance=ExtResource( 6 )]
+[node name="TopBar" type="HBoxContainer" parent="Hud"]
+anchor_right = 1.0
+margin_left = 16.0
+margin_top = 16.0
+margin_right = -16.0
+margin_bottom = 76.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HealthMoney" type="VBoxContainer" parent="Hud/TopBar"]
+margin_right = 108.0
+margin_bottom = 68.0
+
+[node name="PlayerHealth" parent="Hud/TopBar/HealthMoney" instance=ExtResource( 6 )]
+margin_right = 108.0
+margin_bottom = 32.0
