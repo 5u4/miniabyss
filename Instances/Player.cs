@@ -29,8 +29,6 @@ namespace MiniAbyss.Instances
         {
             MaxHealth = PlayerData.Instance.MaxHealth;
             Health = PlayerData.Instance.Health;
-
-            // TODO apply item effects
         }
 
         public override void OnDeath()

@@ -5,10 +5,11 @@
 [ext_resource path="res://Games/BattleCamera.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Scenes/Level.cs" type="Script" id=4]
 [ext_resource path="res://Instances/Exit.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Hud/PlayerHealthHud.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Hud/Hud.tscn" type="PackedScene" id=6]
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 4 )
+HudScene = ExtResource( 6 )
 
 [node name="BattleGrid" parent="." instance=ExtResource( 2 )]
 scale = Vector2( 2, 2 )
@@ -36,22 +37,5 @@ BattleGridPath = NodePath("../..")
 [node name="Exit" parent="BattleGrid" instance=ExtResource( 5 )]
 BattleGridPath = NodePath("..")
 
-[node name="Hud" type="CanvasLayer" parent="."]
-
-[node name="TopBar" type="HBoxContainer" parent="Hud"]
-anchor_right = 1.0
-margin_left = 16.0
-margin_top = 16.0
-margin_right = -16.0
-margin_bottom = 76.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HealthMoney" type="VBoxContainer" parent="Hud/TopBar"]
-margin_right = 108.0
-margin_bottom = 60.0
-
-[node name="PlayerHealth" parent="Hud/TopBar/HealthMoney" instance=ExtResource( 6 )]
-margin_right = 108.0
-margin_bottom = 32.0
+[node name="ItemHolder" type="Node2D" parent="."]
+visible = false

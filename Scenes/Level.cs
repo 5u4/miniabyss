@@ -1,4 +1,5 @@
 using Godot;
+using MiniAbyss.Data;
 using MiniAbyss.Games;
 using MiniAbyss.Instances;
 
@@ -6,6 +7,8 @@ namespace MiniAbyss.Scenes
 {
     public class Level : Node2D
     {
+        [Export] public PackedScene HudScene;
+
         public static int LevelProgress = 0;
 
         public BattleGrid BattleGrid;
@@ -17,11 +20,24 @@ namespace MiniAbyss.Scenes
             Player = GetNode<Player>("BattleGrid/Player");
 
             InitializeLevel();
+            if (PlayerData.Instance.HasHudItem) AddChild(HudScene.Instance());
+            MakeItems();
         }
 
         private void InitializeLevel()
         {
             BattleGrid.Generate(5, 1, 0.5f);
+        }
+
+        private void MakeItems()
+        {
+            var parent = GetNode(PlayerData.Instance.HasHudItem ? "Hud/TopBar/ItemContainer" : "ItemHolder");
+            PlayerData.Instance.Inventory.ForEach(make =>
+            {
+                var item = make();
+                parent.AddChild(item);
+                item.Apply(Player);
+            });
         }
     }
 }

@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using Godot;
+using MiniAbyss.Items;
 
 namespace MiniAbyss.Data
 {
@@ -17,6 +20,8 @@ namespace MiniAbyss.Data
         public int MaxHealth = 5;
         public int Health = 5;
         public int Money;
+        public readonly List<Func<Item>> Inventory = new List<Func<Item>> {HudItem.Make};
+        public bool HasHudItem = true;
 
         public override void _Ready()
         {
