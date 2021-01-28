@@ -57,7 +57,7 @@ namespace MiniAbyss.Instances
             target.Hit(amount, this);
         }
 
-        public async void Hit(int amount, Creature dealer)
+        public virtual async void Hit(int amount, Creature dealer)
         {
             AnimationPlayer.Play("Move");
             var finalDmgAmount = Mathf.Max(1, amount - Defence);

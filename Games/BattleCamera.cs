@@ -11,8 +11,8 @@ namespace MiniAbyss.Games
         {
             BattleGrid = GetNode<BattleGrid>(BattleGridPath);
 
-            BattleGrid.Connect(nameof(BattleGrid.GenerateMapSignal), this, nameof(SetLimitsBasedOnBattleGrid));
-            SetLimitsBasedOnBattleGrid();
+            // BattleGrid.Connect(nameof(BattleGrid.GenerateMapSignal), this, nameof(SetLimitsBasedOnBattleGrid));
+            // SetLimitsBasedOnBattleGrid();
         }
 
         private void SetLimitsBasedOnBattleGrid()

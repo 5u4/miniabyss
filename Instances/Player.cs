@@ -1,12 +1,16 @@
 using Godot;
+using MiniAbyss.Data;
 
 namespace MiniAbyss.Instances
 {
     public class Player : Creature
     {
+        public int MaxHealth;
+
         public override void _Ready()
         {
             base._Ready();
+            InitializePlayer();
             BattleGrid.Connect(nameof(Games.BattleGrid.EnemyTurnEndedSignal), this, nameof(OnEnemyTurnEnded));
         }
 
@@ -21,6 +25,14 @@ namespace MiniAbyss.Instances
             BattleGrid.EmitSignal(nameof(Games.BattleGrid.PlayerTurnEndedSignal));
         }
 
+        public void InitializePlayer()
+        {
+            MaxHealth = PlayerData.Instance.MaxHealth;
+            Health = PlayerData.Instance.Health;
+
+            // TODO apply item effects
+        }
+
         public override void OnDeath()
         {
             base.OnDeath();
@@ -30,6 +42,12 @@ namespace MiniAbyss.Instances
         private void OnEnemyTurnEnded()
         {
             SetProcess(true);
+        }
+
+        public override void Hit(int amount, Creature dealer)
+        {
+            base.Hit(amount, dealer);
+            PlayerData.Instance.EmitSignal(nameof(PlayerData.HealthUpdateSignal), Health, MaxHealth);
         }
 
         private void CaptureInputs()

@@ -1,0 +1,138 @@
+[gd_scene load_steps=14 format=2]
+
+[ext_resource path="res://Assets/Sprites/healthbarfill.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Sprites/healthbarunder.png" type="Texture" id=2]
+[ext_resource path="res://Assets/Sprites/healthbar.png" type="Texture" id=3]
+[ext_resource path="res://Hud/PlayerHealthHud.cs" type="Script" id=4]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 3 )
+region = Rect2( 0, 0, 16, 8 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 3 )
+region = Rect2( 16, 0, 16, 8 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 3 )
+region = Rect2( 32, 0, 16, 8 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 3 )
+region = Rect2( 48, 0, 16, 8 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 3 )
+region = Rect2( 64, 0, 16, 8 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 3 )
+region = Rect2( 80, 0, 16, 8 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 3 )
+region = Rect2( 96, 0, 16, 8 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 3 )
+region = Rect2( 112, 0, 16, 8 )
+
+[sub_resource type="SpriteFrames" id=9]
+animations = [ {
+"frames": [ SubResource( 1 ), SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ) ],
+"loop": false,
+"name": "default",
+"speed": 15.0
+} ]
+
+[node name="PlayerHealthHud" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 55.0
+margin_bottom = 24.0
+rect_scale = Vector2( 2, 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bar" type="Control" parent="HBoxContainer"]
+margin_right = 32.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 32, 16 )
+
+[node name="HealthBar" type="TextureProgress" parent="HBoxContainer/Bar"]
+margin_right = 16.0
+margin_bottom = 8.0
+rect_scale = Vector2( 2, 2 )
+step = 0.1
+texture_under = ExtResource( 2 )
+texture_progress = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="HBoxContainer/Bar"]
+scale = Vector2( 2, 2 )
+frames = SubResource( 9 )
+centered = false
+
+[node name="CurrentHealth" type="Control" parent="HBoxContainer"]
+margin_left = 36.0
+margin_right = 39.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 3, 16 )
+
+[node name="Label" type="Label" parent="HBoxContainer/CurrentHealth"]
+margin_right = 5.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 5, 16 )
+text = "5"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Slash" type="Control" parent="HBoxContainer"]
+margin_left = 43.0
+margin_right = 46.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 3, 16 )
+
+[node name="Label" type="Label" parent="HBoxContainer/Slash"]
+margin_right = 5.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 5, 16 )
+text = "/"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MaxHealth" type="Control" parent="HBoxContainer"]
+margin_left = 50.0
+margin_right = 53.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 3, 16 )
+
+[node name="Label" type="Label" parent="HBoxContainer/MaxHealth"]
+margin_right = 5.0
+margin_bottom = 12.0
+rect_min_size = Vector2( 5, 16 )
+text = "5"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="."]
