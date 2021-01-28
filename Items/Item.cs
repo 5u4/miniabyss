@@ -8,30 +8,20 @@ namespace MiniAbyss.Items
         public const string ItemScenePath = "res://Items/Item.tscn";
 
         public AnimatedSprite AnimatedSprite;
+        public ItemData Data;
 
-        public static Item MakeItem(string scriptPath)
+        public static Item MakeFromData(ItemData data)
         {
-            var instance = GD.Load<PackedScene>(ItemScenePath).Instance();
-            var s = GD.Load<Script>(scriptPath);
-            var id = instance.GetInstanceId();
-            instance.SetScript(s);
-            return (Item) GD.InstanceFromId(id);
-        }
-
-        public virtual SpriteFrames GetSpriteFrames()
-        {
-            return null;
+            var item = (Item) GD.Load<PackedScene>(ItemScenePath).Instance();
+            item.Data = data;
+            return item;
         }
 
         public override void _Ready()
         {
             AnimatedSprite = GetNode<AnimatedSprite>("AnimatedSprite");
 
-            AnimatedSprite.Frames = GetSpriteFrames();
+            AnimatedSprite.Frames = Data.SpriteFrames;
         }
-
-        public virtual void Apply(Creature creature) {}
-
-        public virtual void OnSell() {}
     }
 }

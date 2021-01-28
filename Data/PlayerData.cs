@@ -13,14 +13,17 @@ namespace MiniAbyss.Data
         [Signal]
         public delegate void MoneyUpdateSignal(int amount);
 
-        private PlayerData() {}
+        private PlayerData()
+        {
+            Inventory = new List<ItemData> {new HudItem()};
+        }
 
         public static PlayerData Instance { get; } = new PlayerData();
 
         public int MaxHealth = 5;
         public int Health = 5;
         public int Money;
-        public readonly List<Func<Item>> Inventory = new List<Func<Item>> {HudItem.Make};
+        public List<ItemData> Inventory;
         public bool HasHudItem = true;
 
         public override void _Ready()

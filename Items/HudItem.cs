@@ -3,16 +3,11 @@ using MiniAbyss.Data;
 
 namespace MiniAbyss.Items
 {
-    public class HudItem : Item
+    public class HudItem : ItemData
     {
-        public static Item Make()
+        public HudItem()
         {
-            return MakeItem("res://Items/HudItem.cs");
-        }
-
-        public override SpriteFrames GetSpriteFrames()
-        {
-            return GD.Load<SpriteFrames>("res://SpriteFrames/HudSpriteFrames.tres");
+            SpriteFrames = GD.Load<SpriteFrames>("res://SpriteFrames/HudSpriteFrames.tres");
         }
 
         public override void OnSell()
