@@ -13,6 +13,20 @@
 script = ExtResource( 4 )
 HudScene = ExtResource( 6 )
 
+[node name="BattleCamera" parent="." instance=ExtResource( 3 )]
+scale = Vector2( 2, 2 )
+current = true
+zoom = Vector2( 0.5, 0.5 )
+smoothing_enabled = true
+smoothing_speed = 2.0
+drag_margin_left = 0.4
+drag_margin_top = 0.4
+drag_margin_right = 0.4
+drag_margin_bottom = 0.4
+editor_draw_limits = true
+editor_draw_drag_margin = true
+FollowingPath = NodePath("../BattleGrid/Player")
+
 [node name="BattleGrid" parent="." instance=ExtResource( 2 )]
 scale = Vector2( 2, 2 )
 EnemiesPath = NodePath("Enemies")
@@ -27,18 +41,6 @@ HealthPotionScene = ExtResource( 7 )
 
 [node name="Player" parent="BattleGrid" instance=ExtResource( 1 )]
 BattleGridPath = NodePath("..")
-
-[node name="BattleCamera" parent="BattleGrid/Player" instance=ExtResource( 3 )]
-current = true
-zoom = Vector2( 0.5, 0.5 )
-smoothing_enabled = true
-drag_margin_left = 0.4
-drag_margin_top = 0.4
-drag_margin_right = 0.4
-drag_margin_bottom = 0.4
-editor_draw_limits = true
-editor_draw_drag_margin = true
-BattleGridPath = NodePath("../..")
 
 [node name="Exit" parent="BattleGrid" instance=ExtResource( 5 )]
 BattleGridPath = NodePath("..")
