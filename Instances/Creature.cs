@@ -8,7 +8,6 @@ namespace MiniAbyss.Instances
         [Export] public Faction Faction;
         [Export] public PackedScene DamagePopTextScene;
 
-        public string Display;
         public int MaxHealth = 5;
         public int Health = 5;
         public int Strength;
@@ -81,6 +80,11 @@ namespace MiniAbyss.Instances
             await ToSignal(AnimationPlayer, "animation_finished");
             AnimationPlayer.Play("Idle");
             DeathCheck();
+        }
+
+        public override string MakeDescription()
+        {
+            return $"{base.MakeDescription()}\nATK {Strength} | DEF {Defence}";
         }
 
         public async void Bump()

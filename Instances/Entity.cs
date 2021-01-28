@@ -1,5 +1,6 @@
 using Godot;
 using MiniAbyss.Games;
+using MiniAbyss.Hud;
 
 namespace MiniAbyss.Instances
 {
@@ -7,6 +8,8 @@ namespace MiniAbyss.Instances
     {
         [Export] public NodePath BattleGridPath;
         [Export] public Resource SpriteFramesResource;
+        [Export] public string Display;
+        [Export] public string ShortDesc;
 
         public const int SpriteDimension = 8;
 
@@ -15,6 +18,7 @@ namespace MiniAbyss.Instances
         public AnimatedSprite AnimatedSprite;
         public AnimationPlayer AnimationPlayer;
         public Tween Tween;
+        public DescriptionArea DescriptionArea;
 
         public override void _Ready()
         {
@@ -23,11 +27,19 @@ namespace MiniAbyss.Instances
             AnimatedSprite = GetNode<AnimatedSprite>("SpritePivot/Sprite");
             AnimationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
             Tween = GetNode<Tween>("Tween");
+            DescriptionArea = GetNode<DescriptionArea>("DescriptionArea");
 
             AnimatedSprite.Frames = (SpriteFrames) SpriteFramesResource;
             AnimatedSprite.Play();
 
             AnimationPlayer.Play("Idle");
+
+            DescriptionArea.BeforeShow = () => DescriptionArea.Description = MakeDescription();
+        }
+
+        public virtual string MakeDescription()
+        {
+            return $"{Display}: {ShortDesc}";
         }
     }
 }

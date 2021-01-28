@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Items/Item.cs" type="Script" id=1]
+[ext_resource path="res://Hud/DescriptionArea.tscn" type="PackedScene" id=2]
 
 [node name="Item" type="Control"]
 margin_right = 32.0
@@ -14,3 +15,6 @@ __meta__ = {
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 4, 4 )
 centered = false
+
+[node name="DescriptionArea" parent="." instance=ExtResource( 2 )]
+ExtendDimension = 16.0

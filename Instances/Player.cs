@@ -1,5 +1,6 @@
 using Godot;
 using MiniAbyss.Data;
+using MiniAbyss.Hud;
 
 namespace MiniAbyss.Instances
 {
@@ -9,6 +10,7 @@ namespace MiniAbyss.Instances
         {
             base._Ready();
             InitializePlayer();
+
             BattleGrid.Connect(nameof(Games.BattleGrid.EnemyTurnEndedSignal), this, nameof(OnEnemyTurnEnded));
         }
 

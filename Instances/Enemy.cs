@@ -1,5 +1,6 @@
 using Godot;
 using MiniAbyss.Data;
+using MiniAbyss.Hud;
 
 namespace MiniAbyss.Instances
 {

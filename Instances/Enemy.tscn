@@ -8,5 +8,3 @@
 script = ExtResource( 3 )
 Faction = 1
 DamagePopTextScene = ExtResource( 4 )
-
-[node name="AnimatedSprite" type="AnimatedSprite" parent="SpritePivot" index="1"]

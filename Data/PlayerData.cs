@@ -1,10 +1,12 @@
-using System;
 using System.Collections.Generic;
 using Godot;
 using MiniAbyss.Items;
 
 namespace MiniAbyss.Data
 {
+    /**
+     * More like a game manager
+     */
     public class PlayerData : Node
     {
         [Signal]
@@ -12,6 +14,12 @@ namespace MiniAbyss.Data
 
         [Signal]
         public delegate void MoneyUpdateSignal(int amount);
+
+        [Signal]
+        public delegate void ShowDescriptionSignal(string description);
+
+        [Signal]
+        public delegate void HideDescriptionSignal();
 
         private PlayerData()
         {
