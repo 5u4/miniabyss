@@ -9,6 +9,7 @@ namespace MiniAbyss.Instances
         [Export] public PackedScene DamagePopTextScene;
 
         public string Display;
+        public int MaxHealth = 5;
         public int Health = 5;
         public int Strength;
         public int Defence;
@@ -55,6 +56,16 @@ namespace MiniAbyss.Instances
         {
             var amount = Strength;
             target.Hit(amount, this);
+        }
+
+        public virtual void Heal(int amount)
+        {
+            var finalAmount = amount;
+            Health = Mathf.Min(Health + finalAmount, MaxHealth);
+
+            var popText = (DamagePopText) DamagePopTextScene.Instance();
+            GetTree().CurrentScene.AddChild(popText);
+            popText.Pop(finalAmount, GlobalPosition);
         }
 
         public virtual async void Hit(int amount, Creature dealer)

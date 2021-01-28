@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Instances/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Games/BattleGrid.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Scenes/Level.cs" type="Script" id=4]
 [ext_resource path="res://Instances/Exit.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Hud/Hud.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Instances/HealthPotion.tscn" type="PackedScene" id=7]
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 4 )
@@ -14,10 +15,14 @@ HudScene = ExtResource( 6 )
 [node name="BattleGrid" parent="." instance=ExtResource( 2 )]
 scale = Vector2( 2, 2 )
 EnemiesPath = NodePath("Enemies")
+ConsumablesPath = NodePath("Consumables")
 PlayerPath = NodePath("Player")
 ExitPath = NodePath("Exit")
+HealthPotionScene = ExtResource( 7 )
 
 [node name="Enemies" type="Node2D" parent="BattleGrid"]
+
+[node name="Consumables" type="Node2D" parent="BattleGrid"]
 
 [node name="Player" parent="BattleGrid" instance=ExtResource( 1 )]
 BattleGridPath = NodePath("..")

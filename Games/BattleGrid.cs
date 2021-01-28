@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 using MiniAbyss.Data;
@@ -20,8 +21,10 @@ namespace MiniAbyss.Games
         public delegate void EnemyTurnEndedSignal();
 
         [Export] public NodePath EnemiesPath;
+        [Export] public NodePath ConsumablesPath;
         [Export] public NodePath PlayerPath;
         [Export] public NodePath ExitPath;
+        [Export] public PackedScene HealthPotionScene;
 
         public const int MapEnlargeSize = 3;
         public const int WallTile = -1;
@@ -30,8 +33,12 @@ namespace MiniAbyss.Games
         public const float EnemyAmountToDimensionUpperRatio = 0.1f;
         public const float EnemyAmountToDimensionLowerRatio = 0.4f;
         public const int EnemySpawnMinDistanceBetweenPlayer = 5;
+        public const float PotionAmountToDimensionUpperRatio = 0.05f;
+        public const float PotionAmountToDimensionLowerRatio = 0.1f;
+        public const int PotionSpawnMinDistanceBetweenPlayer = 7;
 
         public Node2D Enemies;
+        public Node2D Consumables;
         public Player Player;
         public Exit Exit;
         public Dictionary<int, Entity> EntityMap;
@@ -40,6 +47,7 @@ namespace MiniAbyss.Games
         public override void _Ready()
         {
             Enemies = GetNode<Node2D>(EnemiesPath);
+            Consumables = GetNode<Node2D>(ConsumablesPath);
             Player = GetNode<Player>(PlayerPath);
             Exit = GetNode<Exit>(ExitPath);
 
@@ -66,7 +74,11 @@ namespace MiniAbyss.Games
             PlaceExitAwayFrom(WorldToMap(Player.Position));
             var enemyAmount = Mathf.RoundToInt(dim * (EnemyAmountToDimensionLowerRatio +
                                                      GD.Randf() * EnemyAmountToDimensionUpperRatio));
-            PlaceEnemies(enemyAmount);
+            PlaceEntityAwayFromPlayer(enemyAmount, MakeEnemy, EnemySpawnMinDistanceBetweenPlayer);
+            var potionAmount =
+                Mathf.RoundToInt(dim * (PotionAmountToDimensionLowerRatio +
+                                        GD.Randf() * PotionAmountToDimensionUpperRatio));
+            PlaceEntityAwayFromPlayer(potionAmount, MakePotion, PotionSpawnMinDistanceBetweenPlayer);
             CenterGridInViewport();
             EmitSignal(nameof(GenerateMapSignal));
         }
@@ -88,50 +100,62 @@ namespace MiniAbyss.Games
             if (EnemyEndedCounter <= 0) EmitSignal(nameof(EnemyTurnEndedSignal));
         }
 
-        public void HandleAction(Creature e, Vector2 dir)
+        public void HandleAction(Creature actor, Vector2 dir)
         {
-            var srcCell = WorldToMap(e.Position);
+            var srcCell = WorldToMap(actor.Position);
             var destCell = srcCell + dir;
             if (IsWall(destCell))
             {
-                e.Bump();
+                actor.Bump();
                 return;
             }
 
             var srcCellKey = GridPosToEntityMapKey(srcCell);
             var destCellKey = GridPosToEntityMapKey(destCell);
             var canMove = true;
-            if (EntityMap.ContainsKey(destCellKey))
-            {
-                var destEntity = EntityMap[destCellKey];
-                switch (destEntity)
-                {
-                    case Exit _:
-                        GD.Print("Exit"); // TODO: Handle exit
-                        break;
-                    case Creature creature:
-                        canMove = false;
-                        if (creature.Faction == e.Faction)
-                        {
-                            e.Bump();
-                            return;
-                        }
-                        e.Attack(creature);
-                        break;
-                }
-            }
+            if (EntityMap.ContainsKey(destCellKey)) canMove = EntityInteraction(actor, EntityMap[destCellKey]);
 
             if (!canMove) return;
-            e.Move(dir);
+            actor.Move(dir);
             if (srcCellKey == destCellKey) return;
             EntityMap.Remove(srcCellKey);
-            EntityMap[destCellKey] = e;
+            EntityMap[destCellKey] = actor;
         }
 
         public void RemoveEntity(Entity e)
         {
             var key = GridPosToEntityMapKey(WorldToMap(e.Position));
             if (EntityMap.ContainsKey(key)) EntityMap.Remove(key);
+        }
+
+        private bool EntityInteraction(Creature actor, Entity target)
+        {
+            var isPlayerAction = actor is Player;
+            switch (target)
+            {
+                case Exit _ when isPlayerAction:
+                    GD.Print("Exit"); // TODO: Handle exit
+                    return true;
+                case Exit _:
+                    actor.Bump();
+                    return false;
+                case Consumable consumable when isPlayerAction:
+                    consumable.Consume(Player);
+                    var consumableKey = GridPosToEntityMapKey(WorldToMap(consumable.Position));
+                    EntityMap.Remove(consumableKey);
+                    return true;
+                case Consumable _:
+                    actor.Bump();
+                    return false;
+                case Creature creature when creature.Faction == actor.Faction:
+                    actor.Bump();
+                    return false;
+                case Creature creature:
+                    actor.Attack(creature);
+                    return false;
+            }
+
+            return false;
         }
 
         private bool IsWall(Vector2 v)
@@ -180,30 +204,44 @@ namespace MiniAbyss.Games
             EntityMap[GridPosToEntityMapKey(lastPos)] = Exit;
         }
 
-        private void PlaceEnemies(int amount)
+        private void PlaceEntityAwayFromPlayer(int amount, Func<Entity> makeEntity, int minDist)
         {
             var playerPos = WorldToMap(Player.Position);
             var emptyCells = GetUsedCells();
-            var enemyKinds = new[] {EnemyKind.Skull}; // TODO generate kinds based on level
             for (var i = 0; i < amount; i++)
             {
                 var p = (Vector2) emptyCells[Mathf.FloorToInt(GD.Randf() * emptyCells.Count)];
                 var key = GridPosToEntityMapKey(p);
                 while (IsWall(p) || EntityMap.ContainsKey(key) ||
-                       DistanceBetweenOver(p, playerPos, EnemySpawnMinDistanceBetweenPlayer) <
-                       EnemySpawnMinDistanceBetweenPlayer)
+                       DistanceBetweenOver(p, playerPos, minDist) < minDist)
                 {
                     p = (Vector2) emptyCells[Mathf.FloorToInt(GD.Randf() * emptyCells.Count)];
                     key = GridPosToEntityMapKey(p);
                 }
 
-                var kind = enemyKinds[Mathf.FloorToInt(GD.Randf() * enemyKinds.Length)];
-                var e = Enemy.Make(kind);
-                e.BattleGridPath = GetPath();
-                Enemies.AddChild(e);
+                var e = makeEntity();
                 e.Position = MapToWorld(p);
                 EntityMap[GridPosToEntityMapKey(p)] = e;
             }
+        }
+
+        private Enemy MakeEnemy()
+        {
+            var enemyKinds = new[] {EnemyKind.Skull}; // TODO generate kinds based on level
+            var kind = enemyKinds[Mathf.FloorToInt(GD.Randf() * enemyKinds.Length)];
+            var e = Enemy.Make(kind);
+            e.BattleGridPath = GetPath();
+            Enemies.AddChild(e);
+            return e;
+        }
+
+        private Consumable MakePotion()
+        {
+            var p = (HealthPotion) HealthPotionScene.Instance();
+            p.BattleGridPath = GetPath();
+            p.SpriteFramesResource = GD.Load("res://SpriteFrames/HealthPotionSpriteFrames.tres");
+            Consumables.AddChild(p);
+            return p;
         }
 
         private int DistanceBetweenOver(Vector2 v1, Vector2 v2, int maxCap)

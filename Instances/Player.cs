@@ -5,8 +5,6 @@ namespace MiniAbyss.Instances
 {
     public class Player : Creature
     {
-        public int MaxHealth;
-
         public override void _Ready()
         {
             base._Ready();
@@ -40,6 +38,12 @@ namespace MiniAbyss.Instances
         private void OnEnemyTurnEnded()
         {
             SetProcess(true);
+        }
+
+        public override void Heal(int amount)
+        {
+            base.Heal(amount);
+            PlayerData.Instance.EmitSignal(nameof(PlayerData.HealthUpdateSignal), Health, MaxHealth);
         }
 
         public override void Hit(int amount, Creature dealer)
