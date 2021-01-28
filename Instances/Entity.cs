@@ -39,7 +39,7 @@ namespace MiniAbyss.Instances
 
         public virtual string MakeDescription()
         {
-            return $"{Display}: {ShortDesc}";
+            return $"[{Display}] {ShortDesc}";
         }
     }
 }

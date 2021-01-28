@@ -7,6 +7,8 @@ namespace MiniAbyss.Items
     {
         public HudItem()
         {
+            Display = "HUD";
+            Description = "Used for displaying UI elements.";
             SpriteFrames = GD.Load<SpriteFrames>("res://SpriteFrames/HudSpriteFrames.tres");
         }
 

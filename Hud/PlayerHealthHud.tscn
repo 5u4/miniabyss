@@ -47,6 +47,7 @@ animations = [ {
 
 [node name="PlayerHealthHud" type="Control"]
 rect_min_size = Vector2( 108, 32 )
+mouse_filter = 1
 script = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": true
@@ -63,6 +64,7 @@ __meta__ = {
 margin_right = 32.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 32, 16 )
+mouse_filter = 1
 
 [node name="HealthBar" type="TextureProgress" parent="HBoxContainer/Bar"]
 margin_right = 16.0
@@ -85,6 +87,7 @@ margin_left = 36.0
 margin_right = 39.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 3, 16 )
+mouse_filter = 1
 
 [node name="Label" type="Label" parent="HBoxContainer/CurrentHealth"]
 margin_right = 5.0
@@ -102,6 +105,7 @@ margin_left = 43.0
 margin_right = 46.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 3, 16 )
+mouse_filter = 1
 
 [node name="Label" type="Label" parent="HBoxContainer/Slash"]
 margin_right = 5.0
@@ -119,6 +123,7 @@ margin_left = 50.0
 margin_right = 53.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 3, 16 )
+mouse_filter = 1
 
 [node name="Label" type="Label" parent="HBoxContainer/MaxHealth"]
 margin_right = 5.0
