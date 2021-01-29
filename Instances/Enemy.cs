@@ -1,6 +1,5 @@
 using Godot;
 using MiniAbyss.Data;
-using MiniAbyss.Hud;
 
 namespace MiniAbyss.Instances
 {
@@ -12,6 +11,7 @@ namespace MiniAbyss.Instances
         public RayCast2D RayCast2D;
         public bool Chasing;
         public float SightRadius;
+        public EnemyData.AfterDamageHook AfterDamage;
 
         public override void _Ready()
         {
@@ -30,6 +30,7 @@ namespace MiniAbyss.Instances
             e.Defence = data.Defence;
             e.SightRadius = data.SightRadius;
             e.SpriteFramesResource = data.SpriteFrames;
+            e.AfterDamage = data.AfterDamage;
             return e;
         }
 
@@ -58,6 +59,12 @@ namespace MiniAbyss.Instances
         {
             base.OnActionFinished();
             BattleGrid.EmitSignal(nameof(Games.BattleGrid.OneEnemyTurnEndedSignal));
+        }
+
+        public override void Damage(Creature target)
+        {
+            base.Damage(target);
+            AfterDamage?.Invoke(target);
         }
 
         private Vector2 Wander()

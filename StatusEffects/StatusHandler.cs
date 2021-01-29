@@ -1,4 +1,5 @@
 using Godot;
+using MiniAbyss.Hud;
 using MiniAbyss.Instances;
 
 namespace MiniAbyss.StatusEffects
@@ -12,5 +13,9 @@ namespace MiniAbyss.StatusEffects
         public abstract void Tick(Creature creature);
 
         public abstract void Extend(StatusHandler other);
+
+        public abstract Icon MakeIcon();
+
+        public abstract bool CanRemove();
     }
 }

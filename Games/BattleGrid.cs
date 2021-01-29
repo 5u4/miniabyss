@@ -43,6 +43,7 @@ namespace MiniAbyss.Games
         public Node2D Consumables;
         public Player Player;
         public Exit Exit;
+        public StatusContainer StatusContainer;
         public Transition Transition;
         public Dictionary<int, Entity> EntityMap;
         public int EnemyEndedCounter;
@@ -92,6 +93,7 @@ namespace MiniAbyss.Games
         public void OnPlayerTurnEnded()
         {
             Player.StatusManager.Tick();
+            if (IsInstanceValid(StatusContainer)) StatusContainer.UpdateIcons();
             EnemyEndedCounter = Enemies.GetChildCount();
             if (EnemyEndedCounter == 0)
             {
@@ -103,6 +105,7 @@ namespace MiniAbyss.Games
                 HandleAction(e, e.Act());
                 e.StatusManager.Tick();
             }
+            if (IsInstanceValid(StatusContainer)) StatusContainer.UpdateIcons();
         }
 
         public void OnOneEnemyTurnEnded()

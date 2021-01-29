@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
+[ext_resource path="res://Hud/StatusContainer.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Hud/PlayerHealthHud.tscn" type="PackedScene" id=2]
 
 [node name="Hud" type="CanvasLayer"]
@@ -16,15 +17,19 @@ __meta__ = {
 
 [node name="HealthMoney" type="VBoxContainer" parent="TopBar"]
 margin_right = 130.0
-margin_bottom = 60.0
+margin_bottom = 68.0
 rect_min_size = Vector2( 130, 0 )
 
 [node name="PlayerHealth" parent="TopBar/HealthMoney" instance=ExtResource( 2 )]
 margin_right = 130.0
 margin_bottom = 32.0
 
+[node name="StatusContainer" parent="TopBar/HealthMoney" instance=ExtResource( 1 )]
+margin_top = 36.0
+margin_bottom = 68.0
+
 [node name="ItemContainer" type="GridContainer" parent="TopBar"]
 margin_left = 134.0
 margin_right = 134.0
-margin_bottom = 60.0
+margin_bottom = 68.0
 columns = 6

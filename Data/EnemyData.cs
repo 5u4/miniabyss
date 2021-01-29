@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using Godot;
+using MiniAbyss.Instances;
 
 namespace MiniAbyss.Data
 {
     public class EnemyData
     {
+        public delegate void AfterDamageHook(Creature target);
+
         public static Dictionary<EnemyKind, EnemyData> Dictionary = new Dictionary<EnemyKind, EnemyData>
         {
             {
@@ -27,5 +30,6 @@ namespace MiniAbyss.Data
         public int Defence;
         public Resource SpriteFrames;
         public int SightRadius;
+        public AfterDamageHook AfterDamage;
     }
 }

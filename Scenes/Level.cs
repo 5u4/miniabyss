@@ -21,7 +21,13 @@ namespace MiniAbyss.Scenes
             BattleGrid = GetNode<BattleGrid>("BattleGrid");
             Player = GetNode<Player>("BattleGrid/Player");
 
-            if (PlayerData.Instance.HasHudItem) AddChild(HudScene.Instance());
+            if (PlayerData.Instance.HasHudItem)
+            {
+                var hud = HudScene.Instance();
+                AddChild(hud);
+                BattleGrid.StatusContainer = hud.GetNode<StatusContainer>("TopBar/HealthMoney/StatusContainer");
+                BattleGrid.StatusContainer.Creature = Player;
+            }
             MakeItems();
             InitializeLevel();
         }

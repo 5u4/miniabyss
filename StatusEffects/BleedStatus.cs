@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using MiniAbyss.Hud;
 using MiniAbyss.Instances;
 
 namespace MiniAbyss.StatusEffects
@@ -17,7 +18,7 @@ namespace MiniAbyss.StatusEffects
 
         public override void Tick(Creature creature)
         {
-            if (TotalDamage <= 0) return;
+            if (CanRemove()) return;
             var dmg = Mathf.Min(Mathf.CeilToInt((float) TotalDamage / MaxTurn), TotalDamage);
             TotalDamage -= dmg;
             creature.Hit(dmg, null, true);
@@ -28,6 +29,18 @@ namespace MiniAbyss.StatusEffects
             if (!(other is BleedStatus bleed)) throw new Exception("Cannot extend different kind of status");
             TotalDamage += bleed.TotalDamage;
             Turn += bleed.Turn;
+        }
+
+        public override Icon MakeIcon()
+        {
+            var i = (BleedIcon) GD.Load<PackedScene>("res://StatusEffects/BleedIcon.tscn").Instance();
+            i.Handler = this;
+            return i;
+        }
+
+        public override bool CanRemove()
+        {
+            return TotalDamage <= 0;
         }
     }
 }

@@ -61,7 +61,7 @@ namespace MiniAbyss.Instances
             OnActionFinished();
         }
 
-        public void Damage(Creature target)
+        public virtual void Damage(Creature target)
         {
             var amount = Strength;
             target.Hit(amount, this);

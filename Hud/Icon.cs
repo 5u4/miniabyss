@@ -17,6 +17,8 @@ namespace MiniAbyss.Hud
             Connect("mouse_exited", this, nameof(OnMouseExited));
         }
 
+        public virtual void Rerender() {}
+
         public virtual string MakeDescription()
         {
             return "";

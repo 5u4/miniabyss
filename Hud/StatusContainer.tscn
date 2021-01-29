@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Hud/StatusContainer.cs" type="Script" id=1]
+
+[node name="StatusContainer" type="GridContainer"]
+margin_right = 130.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 130, 32 )
+columns = 3
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
