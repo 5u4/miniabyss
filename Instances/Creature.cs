@@ -8,10 +8,17 @@ namespace MiniAbyss.Instances
         [Export] public Faction Faction;
         [Export] public PackedScene DamagePopTextScene;
 
+        public AnimationPlayer ReactionAnimationPlayer;
         public int MaxHealth = 5;
         public int Health = 5;
         public int Strength;
         public int Defence;
+
+        public override void _Ready()
+        {
+            base._Ready();
+            ReactionAnimationPlayer = GetNode<AnimationPlayer>("ReactionAnimationPlayer");
+        }
 
         public virtual void OnActionFinished()
         {
@@ -69,7 +76,7 @@ namespace MiniAbyss.Instances
 
         public virtual async void Hit(int amount, Creature dealer)
         {
-            AnimationPlayer.Play("Move");
+            ReactionAnimationPlayer.Play("Move");
             var finalDmgAmount = Mathf.Max(1, amount - Defence);
             Health -= finalDmgAmount;
 
@@ -77,8 +84,6 @@ namespace MiniAbyss.Instances
             GetTree().CurrentScene.AddChild(popText);
             popText.Pop(-finalDmgAmount, GlobalPosition);
 
-            await ToSignal(AnimationPlayer, "animation_finished");
-            AnimationPlayer.Play("Idle");
             DeathCheck();
         }
 
