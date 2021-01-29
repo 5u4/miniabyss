@@ -1,17 +1,11 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Items/Item.cs" type="Script" id=1]
+[ext_resource path="res://Hud/Icon.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Items/Item.cs" type="Script" id=2]
 
-[node name="Item" type="Control"]
-margin_right = 32.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-mouse_filter = 1
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Item" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+[node name="AnimatedSprite" parent="." index="0"]
 scale = Vector2( 4, 4 )
 centered = false
