@@ -32,7 +32,7 @@ namespace MiniAbyss.Hud
             Connect("pressed", this, nameof(OnPressed));
         }
 
-        private void OnPressed()
+        public void Toggle()
         {
             if (!Selected && !CanSelect.Invoke(Item))
             {
@@ -44,6 +44,11 @@ namespace MiniAbyss.Hud
 
             if (Selected) OnSelect.Invoke(Item);
             else OnUnSelect.Invoke(Item);
+        }
+
+        private void OnPressed()
+        {
+            Toggle();
         }
 
         private void Shake()

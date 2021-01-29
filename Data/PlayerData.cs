@@ -27,7 +27,7 @@ namespace MiniAbyss.Data
 
         private PlayerData()
         {
-            Inventory = new List<ItemData> {new HudItem()};
+            Inventory = new List<ItemData> {new HudItem(), new ShieldItem()};
         }
 
         public static PlayerData Instance { get; } = new PlayerData();

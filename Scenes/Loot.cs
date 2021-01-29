@@ -66,7 +66,7 @@ namespace MiniAbyss.Scenes
             CollectLoots();
             Transition.Close();
             await ToSignal(Transition.Tween, "tween_all_completed");
-            GetTree().ChangeScene("res://Scenes/Level.tscn");
+            GetTree().ChangeSceneTo(NextScene);
         }
 
         private void CollectLoots()
