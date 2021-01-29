@@ -24,7 +24,8 @@ namespace MiniAbyss.Items
 
         public override string MakeDescription()
         {
-            return $"[{Data.Display}] {Data.Description}";
+            return $"[{Data.Display}] {Data.Description()}\n"
+                   + $"Lv. {Data.Level} | W. {Data.Weight} | ${Data.Price}";
         }
     }
 }

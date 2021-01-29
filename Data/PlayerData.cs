@@ -23,11 +23,11 @@ namespace MiniAbyss.Data
         [Signal]
         public delegate void HideDescriptionSignal();
 
-        public const int BaseCapacity = 7;
+        public const int BaseCapacity = 10;
 
         private PlayerData()
         {
-            Inventory = new List<ItemData> {new HudItem(), new ShieldItem()};
+            Inventory = new List<ItemData> {new HudItem()};
         }
 
         public static PlayerData Instance { get; } = new PlayerData();

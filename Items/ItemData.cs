@@ -5,8 +5,9 @@ namespace MiniAbyss.Items
 {
     public class ItemData : Node
     {
+        public int Level = 1;
+        public int MaxLevel = 1;
         public string Display;
-        public string Description;
         public int Weight;
         public int Price;
         public int UpgradePrice;
@@ -14,12 +15,20 @@ namespace MiniAbyss.Items
 
         public virtual void Apply(Creature creature) {}
 
-        public virtual bool CanUpgrade()
+        public virtual string Description()
         {
-            return false;
+            return "";
         }
 
-        public virtual void Upgrade() {}
+        public virtual bool CanUpgrade()
+        {
+            return Level < MaxLevel;
+        }
+
+        public virtual void Upgrade()
+        {
+            Level++;
+        }
 
         public virtual void OnSell() {}
     }

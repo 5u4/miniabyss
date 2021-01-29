@@ -66,8 +66,7 @@ namespace MiniAbyss.Scenes
         {
             if (CurrentSelect == null) return;
             CurrentSelect.Item.Data.OnSell();
-            var newMoney = PlayerData.Instance.Money + CurrentSelect.Item.Data.Price;
-            PlayerData.Instance.EmitSignal(nameof(PlayerData.MoneyUpdateSignal), newMoney);
+            UpdateMoney(PlayerData.Instance.Money + CurrentSelect.Item.Data.Price);
             InventorySize -= CurrentSelect.Item.Data.Weight;
             InventoryIndicator.OnChangeInventory(InventorySize, 0, InventoryCapacity);
             var parent = CurrentSelect.GetParent();
@@ -79,8 +78,17 @@ namespace MiniAbyss.Scenes
 
         private void OnUpgradeButtonPressed()
         {
-            // TODO
+            if (CurrentSelect == null) return;
+            var newMoney = PlayerData.Instance.Money - CurrentSelect.Item.Data.UpgradePrice;
+            if (newMoney < 0) return;
+            CurrentSelect.Item.Data.Upgrade();
+            UpdateMoney(newMoney);
             UpdateUpgradeButton();
+        }
+
+        private void UpdateMoney(int amount)
+        {
+            PlayerData.Instance.EmitSignal(nameof(PlayerData.MoneyUpdateSignal), amount);
         }
 
         private void UpdateSellButton()
@@ -105,10 +113,11 @@ namespace MiniAbyss.Scenes
                 return;
             }
             var canUpgrade = CurrentSelect.Item.Data.CanUpgrade();
+            var enoughMoney = PlayerData.Instance.Money >= CurrentSelect.Item.Data.UpgradePrice;
             UpgradeButton.Text = canUpgrade
                 ? $"Upgrade ${CurrentSelect.Item.Data.UpgradePrice}"
-                : "Cannot Upgrade";
-            UpgradeButton.Disabled = !canUpgrade;
+                : "Max Leveled";
+            UpgradeButton.Disabled = !canUpgrade || !enoughMoney;
         }
 
         private List<ItemSelect> GenerateInventory()
