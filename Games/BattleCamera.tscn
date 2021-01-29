@@ -3,4 +3,5 @@
 [ext_resource path="res://Games/BattleCamera.cs" type="Script" id=1]
 
 [node name="BattleCamera" type="Camera2D"]
+zoom = Vector2( 0.5, 0.5 )
 script = ExtResource( 1 )

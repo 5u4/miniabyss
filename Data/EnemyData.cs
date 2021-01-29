@@ -15,6 +15,7 @@ namespace MiniAbyss.Data
                     Health = 3,
                     Strength = 1,
                     Defence = 0,
+                    SightRadius = 5,
                     SpriteFrames = GD.Load("res://SpriteFrames/SkullSpriteFrames.tres"),
                 }
             },
@@ -25,5 +26,6 @@ namespace MiniAbyss.Data
         public int Strength;
         public int Defence;
         public Resource SpriteFrames;
+        public int SightRadius;
     }
 }

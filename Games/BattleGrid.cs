@@ -64,7 +64,8 @@ namespace MiniAbyss.Games
 
         public void Generate(int dim, int offset, float coverage)
         {
-            foreach (Node child in Enemies.GetChildren()) Enemies.RemoveChild(child);
+            RemoveGroupChildren(Enemies);
+            RemoveGroupChildren(Consumables);
             EntityMap = new Dictionary<int, Entity>();
 
             Rng.Instance.G.Randomize();
@@ -74,7 +75,7 @@ namespace MiniAbyss.Games
             PlacePlayer();
             PlaceExitAwayFrom(WorldToMap(Player.Position));
             var enemyAmount = Mathf.RoundToInt(dim * (EnemyAmountToDimensionLowerRatio +
-                                                     Rng.Instance.G.Randf() * EnemyAmountToDimensionUpperRatio));
+                                                      Rng.Instance.G.Randf() * EnemyAmountToDimensionUpperRatio));
             PlaceEntityAwayFromPlayer(enemyAmount, MakeEnemy, EnemySpawnMinDistanceBetweenPlayer);
             var potionAmount =
                 Mathf.RoundToInt(dim * (PotionAmountToDimensionLowerRatio +
@@ -129,6 +130,27 @@ namespace MiniAbyss.Games
             if (EntityMap.ContainsKey(key)) EntityMap.Remove(key);
         }
 
+        public Vector2 ComputeShortestMoveDir(Vector2 from, Vector2 to)
+        {
+            // TODO: Hacky
+            var upDist = DistToTarget(from + Vector2.Up, to);
+            var downDist = DistToTarget(from + Vector2.Down, to);
+            var leftDist = DistToTarget(from + Vector2.Left, to);
+            var rightDist = DistToTarget(from + Vector2.Right, to);
+
+            var minDist = Mathf.Min(upDist, Mathf.Min(downDist, Mathf.Min(leftDist, rightDist)));
+            if (minDist == upDist) return Vector2.Up;
+            if (minDist == downDist) return Vector2.Down;
+            return minDist == leftDist ? Vector2.Left : Vector2.Right;
+        }
+
+        private int DistToTarget(Vector2 src, Vector2 dest)
+        {
+            if (src.Equals(dest)) return 0;
+            const int unWalkableCost = 10;
+            return DistanceBetween(src, dest) + (Walkable(src, true) ? 0 : unWalkableCost);
+        }
+
         private bool EntityInteraction(Creature actor, Entity target)
         {
             var isPlayerAction = actor is Player;
@@ -166,6 +188,15 @@ namespace MiniAbyss.Games
                    || GetCellv(v + new Vector2(1, -1)) == WallTile
                    || GetCellv(v + new Vector2(-1, 1)) == WallTile
                    || GetCellv(v + new Vector2(-1, -1)) == WallTile;
+        }
+
+        private void RemoveGroupChildren(Node group)
+        {
+            foreach (Node child in group.GetChildren())
+            {
+                group.RemoveChild(child);
+                child.QueueFree();
+            }
         }
 
         private void PlacePlayer()
@@ -214,7 +245,7 @@ namespace MiniAbyss.Games
                 var p = (Vector2) emptyCells[Mathf.FloorToInt(Rng.Instance.G.Randf() * emptyCells.Count)];
                 var key = GridPosToEntityMapKey(p);
                 while (IsWall(p) || EntityMap.ContainsKey(key) ||
-                       DistanceBetweenOver(p, playerPos, minDist) < minDist)
+                       DistanceBetween(p, playerPos, minDist) < minDist)
                 {
                     p = (Vector2) emptyCells[Mathf.FloorToInt(Rng.Instance.G.Randf() * emptyCells.Count)];
                     key = GridPosToEntityMapKey(p);
@@ -245,7 +276,7 @@ namespace MiniAbyss.Games
             return p;
         }
 
-        private int DistanceBetweenOver(Vector2 v1, Vector2 v2, int maxCap)
+        private int DistanceBetween(Vector2 v1, Vector2 v2, int maxCap = int.MaxValue, bool avoidEntity = false)
         {
             var queue = new Queue<Vector2>();
             queue.Enqueue(v1);
@@ -261,16 +292,21 @@ namespace MiniAbyss.Games
                     var key = GridPosToEntityMapKey(pos);
                     if (visited.Contains(key)) continue;
                     visited.Add(key);
-                    if (!IsWall(pos + Vector2.Left)) queue.Enqueue(pos + Vector2.Left);
-                    if (!IsWall(pos + Vector2.Right)) queue.Enqueue(pos + Vector2.Right);
-                    if (!IsWall(pos + Vector2.Up)) queue.Enqueue(pos + Vector2.Up);
-                    if (!IsWall(pos + Vector2.Down)) queue.Enqueue(pos + Vector2.Down);
+                    if (Walkable(pos + Vector2.Left, avoidEntity)) queue.Enqueue(pos + Vector2.Left);
+                    if (Walkable(pos + Vector2.Right, avoidEntity)) queue.Enqueue(pos + Vector2.Right);
+                    if (Walkable(pos + Vector2.Up, avoidEntity)) queue.Enqueue(pos + Vector2.Up);
+                    if (Walkable(pos + Vector2.Down, avoidEntity)) queue.Enqueue(pos + Vector2.Down);
                 }
 
                 dist++;
             }
 
             return dist;
+        }
+
+        private bool Walkable(Vector2 p, bool avoidEntity = false)
+        {
+            return !IsWall(p) && (!avoidEntity || !EntityMap.ContainsKey(GridPosToEntityMapKey(p)));
         }
 
         private int GridPosToEntityMapKey(Vector2 v)

@@ -16,7 +16,6 @@ HudScene = ExtResource( 6 )
 [node name="BattleCamera" parent="." instance=ExtResource( 3 )]
 scale = Vector2( 2, 2 )
 current = true
-zoom = Vector2( 0.5, 0.5 )
 smoothing_enabled = true
 smoothing_speed = 2.0
 drag_margin_left = 0.4
