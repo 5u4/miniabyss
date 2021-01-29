@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Godot;
 using MiniAbyss.Hud;
 using MiniAbyss.StatusEffects;
@@ -6,6 +9,10 @@ namespace MiniAbyss.Instances
 {
     public class Creature : Entity
     {
+        public delegate int BeforeDamageHook(Creature dealer, Creature target, int amount);
+
+        public delegate void AfterDamageHook(Creature dealer, Creature target, int amount);
+
         [Export] public Faction Faction;
         [Export] public PackedScene DamagePopTextScene;
 
@@ -15,6 +22,11 @@ namespace MiniAbyss.Instances
         public int Health = 5;
         public int Strength;
         public int Defence;
+
+        public float HealEfficiency = 1;
+
+        public readonly List<BeforeDamageHook> BeforeDamages = new List<BeforeDamageHook>();
+        public readonly List<AfterDamageHook> AfterDamages = new List<AfterDamageHook>();
 
         public override void _Ready()
         {
@@ -63,13 +75,15 @@ namespace MiniAbyss.Instances
 
         public virtual void Damage(Creature target)
         {
-            var amount = Strength;
-            target.Hit(amount, this);
+            var amount = BeforeDamages.Aggregate(Strength,
+                (current, beforeDamageHook) => beforeDamageHook.Invoke(this, target, current));
+            var finalAmount = target.Hit(amount, this);
+            AfterDamages.ForEach(hook => hook.Invoke(this, target, finalAmount));
         }
 
         public virtual void Heal(int amount)
         {
-            var finalAmount = amount;
+            var finalAmount = Mathf.CeilToInt(amount * HealEfficiency);
             Health = Mathf.Min(Health + finalAmount, MaxHealth);
 
             var popText = (DamagePopText) DamagePopTextScene.Instance();
@@ -77,7 +91,7 @@ namespace MiniAbyss.Instances
             popText.Pop(finalAmount, GlobalPosition);
         }
 
-        public virtual async void Hit(int amount, Creature dealer, bool pure = false)
+        public virtual int Hit(int amount, Creature dealer, bool pure = false)
         {
             ReactionAnimationPlayer.Play("Move");
             var finalDmgAmount = pure ? amount : Mathf.Max(1, amount - Defence);
@@ -88,6 +102,8 @@ namespace MiniAbyss.Instances
             popText.Pop(-finalDmgAmount, GlobalPosition);
 
             DeathCheck();
+
+            return finalDmgAmount;
         }
 
         public override string MakeDescription()

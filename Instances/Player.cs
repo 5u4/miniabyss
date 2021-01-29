@@ -47,10 +47,11 @@ namespace MiniAbyss.Instances
             PlayerData.Instance.EmitSignal(nameof(PlayerData.HealthUpdateSignal), Health, MaxHealth);
         }
 
-        public override void Hit(int amount, Creature dealer, bool pure = false)
+        public override int Hit(int amount, Creature dealer, bool pure = false)
         {
-            base.Hit(amount, dealer, pure);
+            var finalAmount = base.Hit(amount, dealer, pure);
             PlayerData.Instance.EmitSignal(nameof(PlayerData.HealthUpdateSignal), Health, MaxHealth);
+            return finalAmount;
         }
 
         private void CaptureInputs()
