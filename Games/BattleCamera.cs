@@ -15,7 +15,7 @@ namespace MiniAbyss.Games
 
         public override void _PhysicsProcess(float delta)
         {
-            if (Following != null) GlobalPosition = Following.GlobalPosition;
+            if (IsInstanceValid(Following)) GlobalPosition = Following.GlobalPosition;
         }
     }
 }
