@@ -64,7 +64,7 @@ namespace MiniAbyss.Instances
         public override void Damage(Creature target)
         {
             base.Damage(target);
-            AfterDamage?.Invoke(target);
+            AfterDamage?.Invoke(this, target);
         }
 
         private Vector2 Wander()
