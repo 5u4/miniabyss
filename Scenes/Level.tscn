@@ -15,6 +15,13 @@
 script = ExtResource( 4 )
 HudScene = ExtResource( 6 )
 
+[node name="DescriptionLayer" parent="." instance=ExtResource( 8 )]
+
+[node name="TransitionLayer" type="CanvasLayer" parent="."]
+
+[node name="Transition" parent="TransitionLayer" instance=ExtResource( 9 )]
+visible = false
+
 [node name="BattleCamera" parent="." instance=ExtResource( 3 )]
 scale = Vector2( 2, 2 )
 current = true
@@ -49,12 +56,4 @@ BattleGridPath = NodePath("..")
 BattleGridPath = NodePath("..")
 
 [node name="ItemHolder" type="Node2D" parent="."]
-visible = false
-
-[node name="DescriptionLayer" parent="." instance=ExtResource( 8 )]
-
-[node name="TransitionLayer" type="CanvasLayer" parent="."]
-layer = 5
-
-[node name="Transition" parent="TransitionLayer" instance=ExtResource( 9 )]
 visible = false

@@ -14,7 +14,7 @@ namespace MiniAbyss.Items
         {
             MaxLevel = 5;
             Display = "Heart";
-            Weight = 5;
+            Weight = 3;
             Price = 10;
             UpgradePrice = 15;
             SpriteFrames = GD.Load<SpriteFrames>("res://SpriteFrames/HeartSpriteFrames.tres");

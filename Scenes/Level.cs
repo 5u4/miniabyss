@@ -9,6 +9,9 @@ namespace MiniAbyss.Scenes
 {
     public class Level : Node2D
     {
+        public const int BaseDim = 5;
+        public const float DepthDimRatio = 0.4f;
+
         [Export] public PackedScene HudScene;
 
         public BattleGrid BattleGrid;
@@ -25,6 +28,7 @@ namespace MiniAbyss.Scenes
             {
                 var hud = HudScene.Instance();
                 AddChild(hud);
+                MoveChild(hud, 0);
                 BattleGrid.StatusContainer = hud.GetNode<StatusContainer>("VBox/TopBar/HealthMoney/StatusContainer");
                 BattleGrid.StatusContainer.Creature = Player;
             }
@@ -34,7 +38,8 @@ namespace MiniAbyss.Scenes
 
         private void InitializeLevel()
         {
-            BattleGrid.Generate(5, 1, 0.5f);
+            var dim = Mathf.RoundToInt(BaseDim + DepthDimRatio * PlayerData.Instance.Depth);
+            BattleGrid.Generate(dim, 1, 0.5f);
         }
 
         private void MakeItems()

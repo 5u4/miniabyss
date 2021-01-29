@@ -12,13 +12,10 @@ script = ExtResource( 3 )
 Faction = 1
 DamagePopTextScene = ExtResource( 4 )
 
-[node name="Sprite" parent="SpritePivot" index="0"]
-position = Vector2( 0, 0 )
-
 [node name="ExpressionSprite" type="AnimatedSprite" parent="SpritePivot" index="1"]
 scale = Vector2( 1e-05, 1e-05 )
 frames = ExtResource( 2 )
-animation = "?"
+animation = "!"
 
 [node name="ExpressionAnimationPlayer" type="AnimationPlayer" parent="." index="3"]
 anims/ExclamationMark = ExtResource( 6 )

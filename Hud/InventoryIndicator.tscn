@@ -6,7 +6,7 @@
 [node name="InventoryIndicator" type="Control"]
 margin_bottom = 32.0
 rect_min_size = Vector2( 340, 68 )
-mouse_filter = 1
+mouse_filter = 2
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -16,6 +16,7 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 340, 68 )
+mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -24,6 +25,7 @@ __meta__ = {
 margin_right = 340.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 43, 32 )
+mouse_filter = 2
 
 [node name="Label" type="Label" parent="VBoxContainer/Control"]
 margin_top = -16.0
@@ -42,6 +44,7 @@ __meta__ = {
 margin_top = 36.0
 margin_right = 340.0
 margin_bottom = 68.0
+mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }

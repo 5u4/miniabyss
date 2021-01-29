@@ -12,6 +12,7 @@ margin_left = 16.0
 margin_top = 16.0
 margin_right = -16.0
 margin_bottom = -16.0
+mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -19,6 +20,7 @@ __meta__ = {
 [node name="TopBar" type="HBoxContainer" parent="VBox"]
 margin_right = 352.0
 margin_bottom = 68.0
+mouse_filter = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -27,6 +29,7 @@ __meta__ = {
 margin_right = 130.0
 margin_bottom = 68.0
 rect_min_size = Vector2( 130, 0 )
+mouse_filter = 2
 
 [node name="PlayerHealth" parent="VBox/TopBar/HealthMoney" instance=ExtResource( 2 )]
 margin_right = 130.0
@@ -35,6 +38,7 @@ margin_bottom = 32.0
 [node name="StatusContainer" parent="VBox/TopBar/HealthMoney" instance=ExtResource( 1 )]
 margin_top = 36.0
 margin_bottom = 68.0
+mouse_filter = 2
 
 [node name="ItemContainer" type="GridContainer" parent="VBox/TopBar"]
 margin_left = 134.0

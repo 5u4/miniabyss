@@ -13,7 +13,7 @@ namespace MiniAbyss.Items
         {
             MaxLevel = 4;
             Display = "Vampire";
-            Weight = 6;
+            Weight = 4;
             Price = 12;
             SpriteFrames = GD.Load<SpriteFrames>("res://SpriteFrames/VampireSpriteFrames.tres");
         }

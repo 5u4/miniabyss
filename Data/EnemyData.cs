@@ -14,6 +14,7 @@ namespace MiniAbyss.Data
                 EnemyKind.Skull,
                 new EnemyData
                 {
+                    AppearAt = 0,
                     Display = "Skull",
                     Description = "A skull without body.",
                     Health = 3,
@@ -27,6 +28,7 @@ namespace MiniAbyss.Data
                 EnemyKind.Skeleton,
                 new EnemyData
                 {
+                    AppearAt = 3,
                     Display = "Skeleton",
                     Description = "A skull with body.",
                     Health = 5,
@@ -40,6 +42,7 @@ namespace MiniAbyss.Data
                 EnemyKind.Bat,
                 new EnemyData
                 {
+                    AppearAt = 8,
                     Display = "Bat",
                     Description = "Heal 1 after attacking.",
                     Health = 4,
@@ -54,6 +57,7 @@ namespace MiniAbyss.Data
                 EnemyKind.Ghost,
                 new EnemyData
                 {
+                    AppearAt = 10,
                     Display = "Ghost",
                     Description = "Reduce target 1 defence after attacking.",
                     Health = 10,
@@ -66,6 +70,7 @@ namespace MiniAbyss.Data
             }
         };
 
+        public int AppearAt;
         public string Display;
         public string Description;
         public int Health;

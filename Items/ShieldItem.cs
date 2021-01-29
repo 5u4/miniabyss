@@ -13,7 +13,7 @@ namespace MiniAbyss.Items
         {
             MaxLevel = 5;
             Display = "Shield";
-            Weight = 4;
+            Weight = 2;
             Price = 7;
             UpgradePrice = 12;
             SpriteFrames = GD.Load<SpriteFrames>("res://SpriteFrames/ShieldSpriteFrames.tres");

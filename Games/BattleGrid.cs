@@ -280,8 +280,8 @@ namespace MiniAbyss.Games
 
         private Enemy MakeEnemy()
         {
-            var enemyKinds = new[] {EnemyKind.Skull}; // TODO generate kinds based on level
-            var kind = enemyKinds[Mathf.FloorToInt(Rng.Instance.G.Randf() * enemyKinds.Length)];
+            var enemyKinds = PlayerData.Instance.GetEnemyKinds();
+            var kind = enemyKinds[Mathf.FloorToInt(Rng.Instance.G.Randf() * enemyKinds.Count)];
             var e = Enemy.Make(kind);
             e.BattleGridPath = GetPath();
             Enemies.AddChild(e);

@@ -65,6 +65,11 @@ namespace MiniAbyss.Data
             return BaseCapacity;
         }
 
+        public List<EnemyKind> GetEnemyKinds()
+        {
+            return (from pair in EnemyData.Dictionary where pair.Value.AppearAt <= Depth select pair.Key).ToList();
+        }
+
         private void OnHealthUpdate(int health, int maxHealth)
         {
             Instance.Health = health;

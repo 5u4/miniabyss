@@ -4,6 +4,7 @@
 margin_right = 256.0
 margin_bottom = 128.0
 rect_min_size = Vector2( 256, 128 )
+mouse_filter = 2
 columns = 10
 __meta__ = {
 "_edit_use_anchors_": false
