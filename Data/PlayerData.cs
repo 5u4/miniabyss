@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Godot;
 using MiniAbyss.Items;
-using MiniAbyss.StatusEffects;
 
 namespace MiniAbyss.Data
 {
