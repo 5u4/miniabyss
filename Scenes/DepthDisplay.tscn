@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/DepthDisplay.cs" type="Script" id=1]
+[ext_resource path="res://Scenes/Shop.tscn" type="PackedScene" id=2]
+
+[node name="DepthDisplay" type="Node2D"]
+script = ExtResource( 1 )
+NextScene = ExtResource( 2 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Depth" type="Label" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -192.0
+margin_bottom = -256.0
+rect_min_size = Vector2( 192, 256 )
+rect_scale = Vector2( 2, 2 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="."]

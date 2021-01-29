@@ -82,7 +82,7 @@ namespace MiniAbyss.Scenes
         {
             var loots = new List<ItemSelect>();
             var quality = PlayerData.Instance.GetItemQuality();
-            var quantity = PlayerData.Instance.Kills + PlayerData.Instance.LastDepth;
+            var quantity = PlayerData.Instance.Kills + PlayerData.Instance.Depth - PlayerData.Instance.LastDepth;
             for (var i = 0; i < quantity; i++) loots.Add(MakeOneLoot(quality));
             return loots;
         }

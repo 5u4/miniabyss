@@ -38,8 +38,9 @@ namespace MiniAbyss.Data
         public List<ItemData> Inventory;
         public bool HasHudItem = true;
         public int Kills = 0;
-        public int LastDepth = 1;
+        public int LastDepth = 0;
         public int Depth = 1;
+        public int Steps = 0;
 
         public override void _Ready()
         {

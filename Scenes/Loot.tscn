@@ -7,7 +7,7 @@
 [ext_resource path="res://Hud/Hud.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Hud/LootPickerContainer.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Hud/ItemSelect.tscn" type="PackedScene" id=7]
-[ext_resource path="res://Scenes/Shop.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Scenes/DepthDisplay.tscn" type="PackedScene" id=8]
 
 [node name="Loot" type="Node2D"]
 script = ExtResource( 4 )
