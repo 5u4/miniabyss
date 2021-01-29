@@ -1,5 +1,6 @@
 using Godot;
 using MiniAbyss.Hud;
+using MiniAbyss.StatusEffects;
 
 namespace MiniAbyss.Instances
 {
@@ -9,6 +10,7 @@ namespace MiniAbyss.Instances
         [Export] public PackedScene DamagePopTextScene;
 
         public AnimationPlayer ReactionAnimationPlayer;
+        public StatusManager StatusManager;
         public int MaxHealth = 5;
         public int Health = 5;
         public int Strength;
@@ -17,6 +19,7 @@ namespace MiniAbyss.Instances
         public override void _Ready()
         {
             base._Ready();
+            StatusManager = new StatusManager(this);
             ReactionAnimationPlayer = GetNode<AnimationPlayer>("ReactionAnimationPlayer");
         }
 
@@ -74,10 +77,10 @@ namespace MiniAbyss.Instances
             popText.Pop(finalAmount, GlobalPosition);
         }
 
-        public virtual async void Hit(int amount, Creature dealer)
+        public virtual async void Hit(int amount, Creature dealer, bool pure = false)
         {
             ReactionAnimationPlayer.Play("Move");
-            var finalDmgAmount = Mathf.Max(1, amount - Defence);
+            var finalDmgAmount = pure ? amount : Mathf.Max(1, amount - Defence);
             Health -= finalDmgAmount;
 
             var popText = (DamagePopText) DamagePopTextScene.Instance();

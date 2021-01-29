@@ -1,6 +1,5 @@
 using Godot;
 using MiniAbyss.Data;
-using MiniAbyss.Hud;
 
 namespace MiniAbyss.Instances
 {
@@ -48,9 +47,9 @@ namespace MiniAbyss.Instances
             PlayerData.Instance.EmitSignal(nameof(PlayerData.HealthUpdateSignal), Health, MaxHealth);
         }
 
-        public override void Hit(int amount, Creature dealer)
+        public override void Hit(int amount, Creature dealer, bool pure = false)
         {
-            base.Hit(amount, dealer);
+            base.Hit(amount, dealer, pure);
             PlayerData.Instance.EmitSignal(nameof(PlayerData.HealthUpdateSignal), Health, MaxHealth);
         }
 

@@ -91,13 +91,18 @@ namespace MiniAbyss.Games
 
         public void OnPlayerTurnEnded()
         {
+            Player.StatusManager.Tick();
             EnemyEndedCounter = Enemies.GetChildCount();
             if (EnemyEndedCounter == 0)
             {
                 EmitSignal(nameof(EnemyTurnEndedSignal));
                 return;
             }
-            foreach (Enemy e in Enemies.GetChildren()) HandleAction(e, e.Act());
+            foreach (Enemy e in Enemies.GetChildren())
+            {
+                HandleAction(e, e.Act());
+                e.StatusManager.Tick();
+            }
         }
 
         public void OnOneEnemyTurnEnded()
