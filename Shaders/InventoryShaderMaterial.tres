@@ -1,0 +1,49 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+render_mode unshaded;
+
+uniform vec4 used_color : hint_color;
+uniform vec4 pred_color : hint_color;
+uniform vec4 unused_color : hint_color;
+
+uniform float size : hint_range(0.0, 100.0);
+uniform float pred_size : hint_range(0.0, 100.0);
+uniform float capacity : hint_range(0.0, 100.0);
+
+uniform float width;
+uniform float cell_size : hint_range(0.0, 10.0);
+
+void fragment()
+{
+    float n = UV.x * width / cell_size;
+    if (fract(n) > 0.5 || n > capacity)
+    {
+        COLOR.a = 0.0;
+    }
+    else if (n > pred_size + size)
+    {
+        COLOR = unused_color;
+    }
+    else if (n > size)
+    {
+        COLOR = pred_color;
+    }
+    else
+    {
+        COLOR = used_color;
+    }
+}
+"
+
+[resource]
+shader = SubResource( 1 )
+shader_param/used_color = Color( 1, 1, 1, 1 )
+shader_param/pred_color = Color( 0.921569, 0.376471, 0.376471, 1 )
+shader_param/unused_color = Color( 0.290196, 0.290196, 0.290196, 1 )
+shader_param/size = 0.0
+shader_param/pred_size = 0.0
+shader_param/capacity = 0.0
+shader_param/width = 288.0
+shader_param/cell_size = 5.0

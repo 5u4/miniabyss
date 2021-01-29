@@ -15,19 +15,18 @@ namespace MiniAbyss.Scenes
 
         public Control LootPickerContainer;
         public Transition Transition;
+        public InventoryIndicator InventoryIndicator;
         public Button NextButton;
         public List<ItemSelect> Loots;
 
         public List<MakeItemData> ItemDataMakers;
 
         public int InventorySize;
+        public int InventoryPredSize;
         public int InventoryCapacity;
 
         public override void _Ready()
         {
-            InventorySize = PlayerData.Instance.GetInventorySize();
-            InventoryCapacity = PlayerData.Instance.GetInventoryCapacity();
-
             ItemDataMakers = new List<MakeItemData>
             {
                 () => new ShieldItem(),
@@ -40,6 +39,12 @@ namespace MiniAbyss.Scenes
             LootPickerContainer = GetNode<Control>("CanvasLayer/VBoxContainer/LootPickerContainer");
             Transition = GetNode<Transition>("TransitionLayer/Transition");
             NextButton = GetNode<Button>("CanvasLayer/VBoxContainer/Control/NextButton");
+            InventoryIndicator = GetNode<InventoryIndicator>("CanvasLayer/VBoxContainer/InventoryIndicator");
+
+            InventorySize = PlayerData.Instance.GetInventorySize();
+            InventoryPredSize = 0;
+            InventoryCapacity = PlayerData.Instance.GetInventoryCapacity();
+            InventoryIndicator.OnChangeInventory(InventorySize, InventoryPredSize, InventoryCapacity);
 
             StartTransition();
 
@@ -89,9 +94,22 @@ namespace MiniAbyss.Scenes
             var item = Item.MakeFromData(itemData);
             var select = (ItemSelect) ItemSelectScene.Instance();
             select.Item = item;
-            select.CanSelect = selected => selected.Data.Weight + InventorySize <= InventoryCapacity;
-            select.OnSelect = selected => InventorySize += selected.Data.Weight;
-            select.OnUnSelect = selected => InventorySize -= selected.Data.Weight;
+            select.CanSelect = selected =>
+            {
+                var canSelect = selected.Data.Weight + InventorySize + InventoryPredSize <= InventoryCapacity;
+                if (!canSelect) InventoryIndicator.Shake();
+                return canSelect;
+            };
+            select.OnSelect = selected =>
+            {
+                InventoryPredSize += selected.Data.Weight;
+                InventoryIndicator.OnChangeInventory(InventorySize, InventoryPredSize, InventoryCapacity);
+            };
+            select.OnUnSelect = selected =>
+            {
+                InventoryPredSize -= selected.Data.Weight;
+                InventoryIndicator.OnChangeInventory(InventorySize, InventoryPredSize, InventoryCapacity);
+            };
             return select;
         }
     }

@@ -1,9 +1,13 @@
-[gd_scene format=2]
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Hud/InventoryIndicator.cs" type="Script" id=1]
+[ext_resource path="res://Shaders/InventoryShaderMaterial.tres" type="Material" id=2]
 
 [node name="InventoryIndicator" type="Control"]
 margin_bottom = 32.0
 rect_min_size = Vector2( 340, 68 )
 mouse_filter = 1
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -42,14 +46,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/HBoxContainer"]
+[node name="Progress" type="ColorRect" parent="VBoxContainer/HBoxContainer"]
+material = ExtResource( 2 )
 margin_right = 288.0
 margin_bottom = 32.0
 rect_min_size = Vector2( 288, 32 )
-mouse_filter = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
 margin_left = 292.0
@@ -70,3 +71,5 @@ valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Tween" type="Tween" parent="."]
