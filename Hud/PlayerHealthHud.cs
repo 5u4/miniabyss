@@ -45,12 +45,15 @@ namespace MiniAbyss.Hud
             Tween.InterpolateProperty(HealthBar, "value", HealthBar.Value, health, 0.3f,
                 Tween.TransitionType.Back);
             const float intensity = 4f;
+            const float duration = 0.2f;
             var p1 = Vector2.Zero;
             var p2 = new Vector2((Rng.Instance.R.Randf() - 0.5f) * intensity, (Rng.Instance.R.Randf() - 0.5f) * intensity);
             var p3 = new Vector2((Rng.Instance.R.Randf() - 0.5f) * intensity, (Rng.Instance.R.Randf() - 0.5f) * intensity);
-            Tween.InterpolateProperty(CurrentHealth, "rect_position", p1, p2, 0.2f, Tween.TransitionType.Back);
-            Tween.InterpolateProperty(CurrentHealth, "rect_position", p2, p3, 0.2f, Tween.TransitionType.Back);
-            Tween.InterpolateProperty(CurrentHealth, "rect_position", p3, p1, 0.2f, Tween.TransitionType.Back);
+            Tween.InterpolateProperty(CurrentHealth, "rect_position", p1, p2, duration, Tween.TransitionType.Back);
+            Tween.InterpolateProperty(CurrentHealth, "rect_position", p2, p3, duration, Tween.TransitionType.Back,
+                Tween.EaseType.InOut, duration);
+            Tween.InterpolateProperty(CurrentHealth, "rect_position", p3, p1, duration, Tween.TransitionType.Back,
+                Tween.EaseType.InOut, duration);
             Tween.Start();
             CurrentHealth.Text = health.ToString();
             MaxHealth.Text = maxHealth.ToString();

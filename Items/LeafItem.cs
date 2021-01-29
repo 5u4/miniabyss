@@ -10,7 +10,7 @@ namespace MiniAbyss.Items
         public LeafItem()
         {
             Display = "Leaf";
-            Description = $"Increase all heals by {Mathf.CeilToInt(HealEffInc)}%.";
+            Description = $"Increase all heals by {Mathf.FloorToInt(HealEffInc * 100)}%.";
             Weight = 4;
             Price = 7;
             SpriteFrames = GD.Load<SpriteFrames>("res://SpriteFrames/LeafSpriteFrames.tres");

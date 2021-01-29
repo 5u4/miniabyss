@@ -11,15 +11,23 @@ namespace MiniAbyss.Scenes
         public delegate ItemData MakeItemData();
 
         [Export] public PackedScene ItemSelectScene;
+        [Export] public PackedScene NextScene;
 
         public Control LootPickerContainer;
         public Transition Transition;
         public Button NextButton;
+        public List<ItemSelect> Loots;
 
         public List<MakeItemData> ItemDataMakers;
 
+        public int InventorySize;
+        public int InventoryCapacity;
+
         public override void _Ready()
         {
+            InventorySize = PlayerData.Instance.GetInventorySize();
+            InventoryCapacity = PlayerData.Instance.GetInventoryCapacity();
+
             ItemDataMakers = new List<MakeItemData>
             {
                 () => new ShieldItem(),
@@ -35,9 +43,10 @@ namespace MiniAbyss.Scenes
 
             StartTransition();
 
-            AddHud();
-
             NextButton.Connect("pressed", this, nameof(OnNextButtonPressed));
+
+            Loots = GenerateLoots();
+            Loots.ForEach(loot => LootPickerContainer.AddChild(loot));
         }
 
         private async void StartTransition()
@@ -49,26 +58,27 @@ namespace MiniAbyss.Scenes
 
         private async void OnNextButtonPressed()
         {
+            CollectLoots();
             Transition.Close();
             await ToSignal(Transition.Tween, "tween_all_completed");
-            // TODO Next scene
+            GetTree().ChangeScene("res://Scenes/Level.tscn");
         }
 
-        private void AddHud()
+        private void CollectLoots()
         {
-            var loots = GenerateLoots();
-            loots.ForEach(l => LootPickerContainer.AddChild(l));
+            Loots.ForEach(loot =>
+            {
+                if (!loot.Selected) return;
+                PlayerData.Instance.Inventory.Add(loot.Item.Data);
+            });
         }
 
         private List<ItemSelect> GenerateLoots()
         {
             var loots = new List<ItemSelect>();
-            // TODO Generate by level
-            for (var i = 0; i < 40; i++)
-            {
-                var loot = MakeOneLoot(3);
-                loots.Add(loot);
-            }
+            var quality = PlayerData.Instance.GetItemQuality();
+            var quantity = PlayerData.Instance.Kills + PlayerData.Instance.LastDepth;
+            for (var i = 0; i < quantity; i++) loots.Add(MakeOneLoot(quality));
             return loots;
         }
 
@@ -79,7 +89,9 @@ namespace MiniAbyss.Scenes
             var item = Item.MakeFromData(itemData);
             var select = (ItemSelect) ItemSelectScene.Instance();
             select.Item = item;
-            select.AddChild(item);
+            select.CanSelect = selected => selected.Data.Weight + InventorySize <= InventoryCapacity;
+            select.OnSelect = selected => InventorySize += selected.Data.Weight;
+            select.OnUnSelect = selected => InventorySize -= selected.Data.Weight;
             return select;
         }
     }

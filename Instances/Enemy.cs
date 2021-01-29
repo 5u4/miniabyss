@@ -93,5 +93,11 @@ namespace MiniAbyss.Instances
             RayCast2D.Enabled = false;
             return !blocked;
         }
+
+        public override void OnDeath()
+        {
+            base.OnDeath();
+            PlayerData.Instance.Kills++;
+        }
     }
 }

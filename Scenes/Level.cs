@@ -11,8 +11,6 @@ namespace MiniAbyss.Scenes
     {
         [Export] public PackedScene HudScene;
 
-        public static int LevelProgress = 0;
-
         public BattleGrid BattleGrid;
         public Player Player;
 
@@ -20,6 +18,8 @@ namespace MiniAbyss.Scenes
         {
             BattleGrid = GetNode<BattleGrid>("BattleGrid");
             Player = GetNode<Player>("BattleGrid/Player");
+
+            PlayerData.Instance.Kills = 0;
 
             if (PlayerData.Instance.HasHudItem)
             {

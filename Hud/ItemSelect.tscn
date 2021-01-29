@@ -91,9 +91,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Holder" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 4, 4 )
 frames = SubResource( 16 )
 animation = "select"
 centered = false
 offset = Vector2( -2, -2 )
+
+[node name="Tween" type="Tween" parent="."]
