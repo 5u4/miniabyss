@@ -25,7 +25,7 @@ namespace MiniAbyss.Scenes
             {
                 var hud = HudScene.Instance();
                 AddChild(hud);
-                BattleGrid.StatusContainer = hud.GetNode<StatusContainer>("TopBar/HealthMoney/StatusContainer");
+                BattleGrid.StatusContainer = hud.GetNode<StatusContainer>("VBox/TopBar/HealthMoney/StatusContainer");
                 BattleGrid.StatusContainer.Creature = Player;
             }
             MakeItems();
@@ -39,7 +39,7 @@ namespace MiniAbyss.Scenes
 
         private void MakeItems()
         {
-            var parent = GetNode(PlayerData.Instance.HasHudItem ? "Hud/TopBar/ItemContainer" : "ItemHolder");
+            var parent = GetNode(PlayerData.Instance.HasHudItem ? "Hud/VBox/TopBar/ItemContainer" : "ItemHolder");
             PlayerData.Instance.Inventory.ForEach(data =>
             {
                 var item = Item.MakeFromData(data);

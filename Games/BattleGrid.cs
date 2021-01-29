@@ -27,6 +27,7 @@ namespace MiniAbyss.Games
         [Export] public NodePath ExitPath;
         [Export] public NodePath TransitionPath;
         [Export] public PackedScene HealthPotionScene;
+        [Export] public PackedScene NextScene;
 
         public const int MapEnlargeSize = 3;
         public const int WallTile = -1;
@@ -169,7 +170,7 @@ namespace MiniAbyss.Games
             switch (target)
             {
                 case Exit _ when isPlayerAction:
-                    TransitToLootScene();
+                    ChangeToNextScene();
                     return true;
                 case Exit _:
                     actor.Bump();
@@ -193,12 +194,12 @@ namespace MiniAbyss.Games
             return false;
         }
 
-        private async void TransitToLootScene()
+        private async void ChangeToNextScene()
         {
             Player.SetProcess(false);
             Transition.Close();
             await ToSignal(Transition.Tween, "tween_all_completed");
-            GD.Print("Exit"); // TODO: Handle exit
+            GetTree().ChangeSceneTo(NextScene);
         }
 
         private bool IsWall(Vector2 v)

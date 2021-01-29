@@ -1,0 +1,10 @@
+[gd_scene format=2]
+
+[node name="LootPickerContainer" type="GridContainer"]
+margin_right = 256.0
+margin_bottom = 128.0
+rect_min_size = Vector2( 256, 128 )
+columns = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}

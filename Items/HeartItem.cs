@@ -12,6 +12,8 @@ namespace MiniAbyss.Items
         {
             Display = "Heart";
             Description = $"Increase your HP by {HealthInc}.";
+            Weight = 5;
+            Price = 10;
             SpriteFrames = GD.Load<SpriteFrames>("res://SpriteFrames/HeartSpriteFrames.tres");
         }
 

@@ -7,6 +7,8 @@ namespace MiniAbyss.Items
     {
         public string Display;
         public string Description;
+        public int Weight;
+        public int Price;
         public SpriteFrames SpriteFrames;
 
         public virtual void Apply(Creature creature) {}

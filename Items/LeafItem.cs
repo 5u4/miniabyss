@@ -11,6 +11,8 @@ namespace MiniAbyss.Items
         {
             Display = "Leaf";
             Description = $"Increase all heals by {Mathf.CeilToInt(HealEffInc)}%.";
+            Weight = 4;
+            Price = 7;
             SpriteFrames = GD.Load<SpriteFrames>("res://SpriteFrames/LeafSpriteFrames.tres");
         }
 

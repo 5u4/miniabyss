@@ -11,6 +11,8 @@ namespace MiniAbyss.Items
         {
             Display = "Sword";
             Description = $"Increase your ATK by {StrengthInc}.";
+            Weight = 4;
+            Price = 7;
             SpriteFrames = GD.Load<SpriteFrames>("res://SpriteFrames/SwordSpriteFrames.tres");
         }
 

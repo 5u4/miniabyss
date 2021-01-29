@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Godot;
+using MiniAbyss.Instances;
 using MiniAbyss.Items;
 
 namespace MiniAbyss.Data
@@ -28,16 +29,16 @@ namespace MiniAbyss.Data
 
         public static PlayerData Instance { get; } = new PlayerData();
 
-        public int MaxHealth = 5;
-        public int Health = 5;
+        public int MaxHealth { get; private set; } = Player.InitialHealth;
+        public int Health { get; private set; } = Player.InitialHealth;
         public int Money;
         public List<ItemData> Inventory;
         public bool HasHudItem = true;
 
         public override void _Ready()
         {
-            Connect(nameof(HealthUpdateSignal), this, nameof(OnHealthUpdate));
-            Connect(nameof(MoneyUpdateSignal), this, nameof(OnMoneyUpdate));
+            Instance.Connect(nameof(HealthUpdateSignal), this, nameof(OnHealthUpdate));
+            Instance.Connect(nameof(MoneyUpdateSignal), this, nameof(OnMoneyUpdate));
         }
 
         private void OnHealthUpdate(int health, int maxHealth)

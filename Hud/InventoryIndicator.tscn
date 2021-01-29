@@ -1,0 +1,72 @@
+[gd_scene format=2]
+
+[node name="InventoryIndicator" type="Control"]
+margin_bottom = 32.0
+rect_min_size = Vector2( 340, 68 )
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 340, 68 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control" type="Control" parent="VBoxContainer"]
+margin_right = 392.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 43, 32 )
+
+[node name="Label" type="Label" parent="VBoxContainer/Control"]
+margin_top = -16.0
+margin_right = 43.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 0, 32 )
+rect_scale = Vector2( 2, 2 )
+text = "Inventory"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_top = 36.0
+margin_right = 392.0
+margin_bottom = 68.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/HBoxContainer"]
+margin_right = 288.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 288, 32 )
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
+margin_left = 292.0
+margin_right = 340.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 48, 32 )
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer/Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -24.0
+margin_bottom = -16.0
+rect_min_size = Vector2( 24, 16 )
+rect_scale = Vector2( 2, 2 )
+text = "2/7"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}

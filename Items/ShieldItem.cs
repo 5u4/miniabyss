@@ -11,6 +11,8 @@ namespace MiniAbyss.Items
         {
             Display = "Shield";
             Description = $"Increase your DEF by {DefenceInc}.";
+            Weight = 4;
+            Price = 7;
             SpriteFrames = GD.Load<SpriteFrames>("res://SpriteFrames/ShieldSpriteFrames.tres");
         }
 

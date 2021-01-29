@@ -11,6 +11,8 @@ namespace MiniAbyss.Items
         {
             Display = "Vampire";
             Description = $"Heal {Ratio * 100}% of the damage you dealt.";
+            Weight = 6;
+            Price = 12;
             SpriteFrames = GD.Load<SpriteFrames>("res://SpriteFrames/VampireSpriteFrames.tres");
         }
 

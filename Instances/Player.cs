@@ -5,6 +5,8 @@ namespace MiniAbyss.Instances
 {
     public class Player : Creature
     {
+        public const int InitialHealth = 5;
+
         public override void _Ready()
         {
             base._Ready();
@@ -26,8 +28,8 @@ namespace MiniAbyss.Instances
 
         public void InitializePlayer()
         {
-            MaxHealth = PlayerData.Instance.MaxHealth;
-            Health = PlayerData.Instance.Health;
+            MaxHealth = InitialHealth;
+            Health = InitialHealth;
         }
 
         public override void OnDeath()
