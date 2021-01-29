@@ -84,33 +84,30 @@ centered = false
 
 [node name="CurrentHealth" type="Control" parent="HBoxContainer"]
 margin_left = 36.0
-margin_right = 39.0
+margin_right = 36.0
 margin_bottom = 16.0
-rect_min_size = Vector2( 3, 16 )
 mouse_filter = 1
 
 [node name="Label" type="Label" parent="HBoxContainer/CurrentHealth"]
 margin_right = 5.0
 margin_bottom = 16.0
-rect_min_size = Vector2( 5, 16 )
+rect_min_size = Vector2( 8, 16 )
 text = "5"
-align = 2
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Slash" type="Control" parent="HBoxContainer"]
-margin_left = 43.0
-margin_right = 46.0
+margin_left = 40.0
+margin_right = 40.0
 margin_bottom = 16.0
-rect_min_size = Vector2( 3, 16 )
 mouse_filter = 1
 
 [node name="Label" type="Label" parent="HBoxContainer/Slash"]
 margin_right = 5.0
 margin_bottom = 16.0
-rect_min_size = Vector2( 5, 16 )
+rect_min_size = Vector2( 8, 16 )
 text = "/"
 align = 1
 valign = 1
@@ -119,17 +116,17 @@ __meta__ = {
 }
 
 [node name="MaxHealth" type="Control" parent="HBoxContainer"]
-margin_left = 50.0
-margin_right = 53.0
+margin_left = 44.0
+margin_right = 44.0
 margin_bottom = 16.0
-rect_min_size = Vector2( 3, 16 )
 mouse_filter = 1
 
 [node name="Label" type="Label" parent="HBoxContainer/MaxHealth"]
 margin_right = 5.0
 margin_bottom = 12.0
-rect_min_size = Vector2( 5, 16 )
+rect_min_size = Vector2( 8, 16 )
 text = "5"
+align = 2
 valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
