@@ -49,33 +49,33 @@ __meta__ = {
 margin_right = 12.0
 margin_bottom = 8.0
 rect_min_size = Vector2( 48, 16 )
-rect_scale = Vector2( 2, 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Icon" type="Control" parent="HBoxContainer"]
-margin_right = 16.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 16, 16 )
+margin_right = 32.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 32, 32 )
 mouse_filter = 1
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="HBoxContainer/Icon"]
-scale = Vector2( 2, 2 )
+scale = Vector2( 4, 4 )
 frames = SubResource( 7 )
 centered = false
 
 [node name="Amount" type="Control" parent="HBoxContainer"]
-margin_left = 20.0
-margin_right = 23.0
-margin_bottom = 16.0
-rect_min_size = Vector2( 3, 16 )
+margin_left = 36.0
+margin_right = 84.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 48, 32 )
 mouse_filter = 1
 
 [node name="Label" type="Label" parent="HBoxContainer/Amount"]
 margin_right = 5.0
 margin_bottom = 16.0
-rect_min_size = Vector2( 5, 16 )
+rect_min_size = Vector2( 24, 16 )
+rect_scale = Vector2( 2, 2 )
 text = "0"
 valign = 1
 __meta__ = {
