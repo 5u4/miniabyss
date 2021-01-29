@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using MiniAbyss.Data;
+using MiniAbyss.Hud;
 using MiniAbyss.Instances;
 
 namespace MiniAbyss.Games
@@ -24,6 +25,7 @@ namespace MiniAbyss.Games
         [Export] public NodePath ConsumablesPath;
         [Export] public NodePath PlayerPath;
         [Export] public NodePath ExitPath;
+        [Export] public NodePath TransitionPath;
         [Export] public PackedScene HealthPotionScene;
 
         public const int MapEnlargeSize = 3;
@@ -41,6 +43,7 @@ namespace MiniAbyss.Games
         public Node2D Consumables;
         public Player Player;
         public Exit Exit;
+        public Transition Transition;
         public Dictionary<int, Entity> EntityMap;
         public int EnemyEndedCounter;
 
@@ -50,6 +53,7 @@ namespace MiniAbyss.Games
             Consumables = GetNode<Node2D>(ConsumablesPath);
             Player = GetNode<Player>(PlayerPath);
             Exit = GetNode<Exit>(ExitPath);
+            Transition = GetNode<Transition>(TransitionPath);
 
             Connect(nameof(PlayerTurnEndedSignal), this, nameof(OnPlayerTurnEnded));
             Connect(nameof(OneEnemyTurnEndedSignal), this, nameof(OnOneEnemyTurnEnded));
@@ -157,7 +161,7 @@ namespace MiniAbyss.Games
             switch (target)
             {
                 case Exit _ when isPlayerAction:
-                    GD.Print("Exit"); // TODO: Handle exit
+                    TransitToLootScene();
                     return true;
                 case Exit _:
                     actor.Bump();
@@ -179,6 +183,14 @@ namespace MiniAbyss.Games
             }
 
             return false;
+        }
+
+        private async void TransitToLootScene()
+        {
+            Player.SetProcess(false);
+            Transition.Close();
+            await ToSignal(Transition.Tween, "tween_all_completed");
+            GD.Print("Exit"); // TODO: Handle exit
         }
 
         private bool IsWall(Vector2 v)

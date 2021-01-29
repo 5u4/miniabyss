@@ -1,6 +1,7 @@
 using Godot;
 using MiniAbyss.Data;
 using MiniAbyss.Games;
+using MiniAbyss.Hud;
 using MiniAbyss.Instances;
 using MiniAbyss.Items;
 

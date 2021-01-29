@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Instances/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Games/BattleGrid.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Hud/Hud.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Instances/HealthPotion.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Hud/DescriptionLayer.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Hud/Transition.tscn" type="PackedScene" id=9]
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 4 )
@@ -32,6 +33,7 @@ EnemiesPath = NodePath("Enemies")
 ConsumablesPath = NodePath("Consumables")
 PlayerPath = NodePath("Player")
 ExitPath = NodePath("Exit")
+TransitionPath = NodePath("../TransitionLayer/Transition")
 HealthPotionScene = ExtResource( 7 )
 
 [node name="Enemies" type="Node2D" parent="BattleGrid"]
@@ -48,3 +50,9 @@ BattleGridPath = NodePath("..")
 visible = false
 
 [node name="DescriptionLayer" parent="." instance=ExtResource( 8 )]
+
+[node name="TransitionLayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="Transition" parent="TransitionLayer" instance=ExtResource( 9 )]
+visible = false
