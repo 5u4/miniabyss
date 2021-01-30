@@ -61,13 +61,6 @@ namespace MiniAbyss.Games
             Connect(nameof(OneEnemyTurnEndedSignal), this, nameof(OnOneEnemyTurnEnded));
         }
 
-        public override void _Process(float delta)
-        {
-            base._Process(delta);
-            // TODO: Remove debug
-            if (Input.IsActionJustPressed("ui_accept")) Generate(5, 1, 0.5f);
-        }
-
         public void Generate(int dim, int offset, float coverage)
         {
             RemoveGroupChildren(Enemies);
